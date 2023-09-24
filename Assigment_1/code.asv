@@ -6,36 +6,29 @@
 
 brute_file = importdata('barrier.log');
 dim = length(brute_file);
+index = 1;
 
-index_A = 1;
-index_C = 1;
-current_line = 1;
-
-A = datetime(0,0,0);
-C = datetime(0,0,0);
-while current_line ~= dim+1
+%while index ~= dim
     
-    %Extract date_time information from brute file
-    date_extract = sscanf(string(brute_file(current_line)),'[%4d:%3d:%2d:%2d:%2d:%1d]\n');
+    date_extract = sscanf(string(brute_file(index)),'[%d:%d:%d:%d:%d:%d]\n');
     date_extract = transpose(date_extract);
-    date_extract = datetime(strjoin(string(date_extract)), 'InputFormat', 'uuuu DDD HH mm ss S');
-    
-    %Determine if it is an Output of Input
-    in_out = sscanf(string(brute_file(current_line)),'[%d:%d:%d:%d:%d:%d][%4s]\n');
+    date_extract = strjoin(string(date_extract));
+    datetime(date_extract, 'Format', 'uuuu DDD hh mm ss S')
+
+    in_out = sscanf(string(brute_file(index)),'[%d:%d:%d:%d:%d:%d][%4s]\n');
     in_out = in_out(8);
-    
-    %Do the test
+
+    %Determine if it is an Output of Input
     if in_out == 73 %ASCII for I --> Means input
-        A(index_A) = date_extract;
-        index_A = index_A + 1;
+        in_out = 1;
     else            %If not --> Means output
-        C(index_C) = date_extract;
-        index_C = index_C + 1;
+        in_out = -1;
     end
 
-    current_line = current_line + 1;
-end
+    %Create type date_time
 
+    index = index + 1;
+%end
 % Arrival rate and throughput
 % Average inter-arrival time
 % Utilization
