@@ -1,0 +1,6 @@
+ - Avg response ratio
+Arrival curve --> Sum inter arrival times
+C(i) = max(A,C) + s
+ri = C-1(i) - A-1(i)
+
+- System Ut. -> just like last assgn
