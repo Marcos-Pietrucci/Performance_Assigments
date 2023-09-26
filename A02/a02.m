@@ -47,6 +47,5 @@ B = sum((M(1:end-1, 3) ~= 0) .* deltaT);
 T = sum(inter_arr);
 U = B/T; 
 
-
 %%%% The frequency at which the system returns idle%%%%
 
