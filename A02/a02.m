@@ -4,9 +4,9 @@
 
 %Reading the Trace_value
     %The code is the same for each scenario, we just have to select which file
-fl = csvread('Trace1.csv');
+%fl = csvread('Trace1.csv');
 %fl = csvread('Trace2.csv');
-%fl = csvread('Trace3.csv');
+fl = csvread('Trace3.csv');
 
 inter_arr = fl(:,1);
 serv_t = fl(:,2);
