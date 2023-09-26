@@ -1,8 +1,8 @@
 % Assigment 1
 
 %Reading values
-brute_file = importdata('barrier.log');
-dim = length(brute_file);
+raw_file = importdata('barrier.log');
+dim = length(raw_file);
 
 index_A = 1;
 index_C = 1;
@@ -119,7 +119,21 @@ while i ~= nC + 1
     i = i + 1;
 end
 
-prob_serv_under_60 = sum(Service > 60)/length(Service);
+prob_serv_over_60 = sum(Service > 60)/length(Service);
 
 %%%%%%%%%%%%%%%%% Presenting values %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+fprintf("\n")
+fprintf("Arrival rate: %.5f job/s\nThroughput: %.5f job/s", lambda, throughput);
+fprintf("\nAverage inter-arrival time: %.5f", a_i);
+fprintf("\nUtilization: %.5f", U);
+fprintf("\nAverage service time: %.5f", S);
+fprintf("\nAverage number of jobs: %.5f", N);
+fprintf("\nAverage response time: %.5f", mean(res));
+fprintf("\nProbability of having 0 parts in the machine: %.5f", prob_0_parts);
+fprintf("\nProbability of having 1 parts in the machine: %.5f", prob_1_parts);
+fprintf("\nProbability of having 2 parts in the machine: %.5f", prob_2_parts);
+fprintf("\nProbability of having a response time less than 30s: %.5f", prob_res_under_30);
+fprintf("\nProbability of having a response time less than 3min: %.5f", prob_res_under_180);
+fprintf("\nProbability of having an inter-arrival time shorter than 1min: %.5f", prob_inter_under_60);
+fprintf("\nProbability of having a service time longer than 1min: %.5f", prob_serv_over_60);
+fprintf("\n");
