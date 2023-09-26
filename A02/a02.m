@@ -32,8 +32,21 @@ end
     %Calculating:
 avg_resp_time = mean(res_t);
 
-%%%%
+%%%% Utilization %%%%
+len = length(A_t);
 
-% Utilization
+M = [transpose(A_t), ones(len, 1); transpose(C_t), -ones(len,1)];
+M = sortrows(M, 1);
+M(:,3) = cumsum(M(:,2));
 
+%Get the time slices
+deltaT = M(2:end, 1) - M(1:end-1, 1);
+
+%Sum all the times whenever there was at least 1 job at the system;
+B = sum((M(1:end-1, 3) ~= 0) .* deltaT);
+T = sum(inter_arr);
+U = B/T; 
+
+
+%%%% The frequency at which the system returns idle%%%%
 
