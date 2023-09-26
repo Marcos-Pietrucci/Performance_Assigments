@@ -64,3 +64,9 @@ avg_idle_time = (T-B)/num_idle;
 
 
 %%%%%% PRESENTING RESULTS %%%%%%
+fprintf("\n");
+fprintf("\nAverage response time: %.5f", avg_resp_time);
+fprintf("\nSystem utilization: %.5f", U);
+fprintf("\nFrequency at which the system return idle: %.5f", freq_idle);
+fprintf("\nAverage idle time: %.5f", avg_idle_time);
+fprintf("\n");
