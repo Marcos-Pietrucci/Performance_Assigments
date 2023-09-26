@@ -21,12 +21,15 @@ while i ~= (length(inter_arr) + 1)
 end
 
     %Completition time
-i = 2;
+i = 1;
 res_t = zeros(1,2);
 C_t = zeros(1,2);
 while i ~= (length(A_t) + 1)
-    C_t(i) = max(A_t(i), C_t(i-1)) + serv_t(i);
-
+    if i == 1
+        C_t(i) = A_t(i) + serv_t(i);
+    else
+        C_t(i) = max(A_t(i), C_t(i-1)) + serv_t(i);
+    end
     %Response time at every instant
     res_t(i) = C_t(i) - A_t(i);
 
