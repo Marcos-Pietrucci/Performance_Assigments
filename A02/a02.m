@@ -3,9 +3,13 @@
 
 
 %Reading the Trace_value
-fl1 = csvread('Trace1.csv');
-inter_arr = fl1(:,1);
-serv_t = fl1(:,2);
+    %The code is the same for each scenario, we just have to select which file
+fl = csvread('Trace1.csv');
+%fl = csvread('Trace2.csv');
+%fl = csvread('Trace3.csv');
+
+inter_arr = fl(:,1);
+serv_t = fl(:,2);
 
 %%% Average response time %%%
     %Arrival time
@@ -48,4 +52,15 @@ T = sum(inter_arr);
 U = B/T; 
 
 %%%% The frequency at which the system returns idle%%%%
+    % Number of times system returns idle / Total time
 
+% Get the number of times system was idle:
+num_idle = sum(M(:,3) == 0);
+freq_idle = num_idle/T;
+
+%%%% Average idle time %%%%
+    % Total idle time (T-B) / num_idle
+avg_idle_time = (T-B)/num_idle;
+
+
+%%%%%% PRESENTING RESULTS %%%%%%
