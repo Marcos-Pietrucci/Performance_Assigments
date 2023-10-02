@@ -6,7 +6,7 @@
     %The code is the same for each scenario, we just have to select which file
 %fl = csvread('Trace1.csv');
 %fl = csvread('Trace2.csv');
-fl = csvread('Trace3.csv');
+fl = csvread('Trace1.csv');
 
 inter_arr = fl(:,1);
 serv_t = fl(:,2);
@@ -21,23 +21,21 @@ while i ~= (length(inter_arr) + 1)
 end
 
     %Completition time
-i = 1;
-res_t = zeros(1,2);
+i = 2;
+R_t = zeros(1,2);
 C_t = zeros(1,2);
-while i ~= (length(A_t) + 1)
-    if i == 1
-        C_t(i) = A_t(i) + serv_t(i);
-    else
-        C_t(i) = max(A_t(i), C_t(i-1)) + serv_t(i);
-    end
-    %Response time at every instant
-    res_t(i) = C_t(i) - A_t(i);
+C_t(1) = serv_t(1);
 
+while i ~= (length(A_t) + 1)
+    C_t(i) = max(A_t(i), C_t(i-1)) + serv_t(i);
+
+    %Response time at every instant
+    R_t(i) = C_t(i) - A_t(i);
     i = i + 1;
 end
 
     %Calculating:
-avg_resp_time = mean(res_t);
+avg_resp_time = mean(R_t);
 
 %%%% Utilization %%%%
 len = length(A_t);
@@ -51,7 +49,7 @@ deltaT = M(2:end, 1) - M(1:end-1, 1);
 
 %Sum all the times whenever there was at least 1 job at the system;
 B = sum((M(1:end-1, 3) ~= 0) .* deltaT);
-T = sum(inter_arr);
+T = C_t(end) - A_t(1);
 U = B/T; 
 
 %%%% The frequency at which the system returns idle%%%%
