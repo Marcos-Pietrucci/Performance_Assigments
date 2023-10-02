@@ -1,0 +1,17 @@
+TRACE 1
+Average response time: 12.49879
+System utilization: 0.84999
+Frequency at which the system return idle: 0.03993
+Average idle time: 3.75659
+
+TRACE 2
+Average response time: 59.53417
+System utilization: 0.84984
+Frequency at which the system return idle: 0.01471
+Average idle time: 10.20551
+
+TRACE 3
+Average response time: 244.73378
+System utilization: 0.84950
+Frequency at which the system return idle: 0.00650
+Average idle time: 23.16783
