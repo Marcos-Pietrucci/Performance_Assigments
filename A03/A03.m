@@ -68,3 +68,21 @@ plot(sDataSet, [1:N]/N, ['-','r']);
 title('Pearson Correlation coefficient of Trace1');
 grid
 
+%%%%%%%%%%%% Presenting %%%%%%%%%%%%
+fprintf("\n----Trace 1 ----\n");
+fprintf("\nMean: %.5f", Mean);
+fprintf("\nSecond Moment: %.5f", Moment2);
+fprintf("\nThird Moment: %.5f", Moment3);
+fprintf("\nFourth Moment: %.5f", Moment4);
+fprintf("\nVariance: %.5f", Var);
+fprintf("\nThird Centered moment: %.5f", CentMomt3);
+fprintf("\nFourth Centered moment: %.5f", CentMomt4);
+fprintf("\nSkewness: %.5f",Skew);
+fprintf("\nFourth Standardized Moment: %.5f",SMom4);
+fprintf("\nStandard Deviation: %.5f",Standard_Dev);
+fprintf("\nCoefficient of Variation: %.5f",Coef_Var);
+fprintf("\nExcess of Kurtosis: %.5f",Exc_Kurt);
+fprintf("\nMedian: %.5f",median);
+fprintf("\nFirst Quartile: %.5f",first_quartile);
+fprintf("\nThird Quartile: %.5f",third_quartile);
+fprintf("\n");

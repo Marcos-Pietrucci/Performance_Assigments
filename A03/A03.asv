@@ -2,9 +2,9 @@
 % Assigment 3
 
 %Reading the Traces
-DataSet = csvread('Trace3.csv');
-%DataSet = csvread('Trace2.csv');
-%DataSet = csvread('Trace3.csv');
+DataSet = csvread('Trace1.csv');
+% DataSet = csvread('Trace2.csv');
+% DataSet = csvread('Trace3.csv');
 
 %Creating the DataSet
 sDataSet = sort(DataSet);
@@ -57,12 +57,25 @@ while m ~= m_sup +1
     m = m + 1;
 end
 
-plot([m_inf:m_sup], [pearson_coef],'-')
-grid on;
+figure(1)
+plot([m_inf:m_sup], [pearson_coef],['-','r'])
 title('Pearson Correlation coefficient of Trace1');
+grid
 
 %Plotting the CDF
-plot(sDataSet, [1:N]/N, '-');
-grid on;
+figure(2)
+plot(sDataSet, [1:N]/N, ['-','r']);
 title('Pearson Correlation coefficient of Trace1');
+grid
+
+%%%%%%%%%%%% Presenting %%%%%%%%%%%%
+fprintf("\n----Trace 1 ----\n");
+fprintf("\nMean: %.5f", Mean);
+fprintf("\nSecond Moment:%.5f", Moment2);
+fprintf("\nThird Moment:%.5f", Moment3);
+fprintf("\nFourth Moment:%.5f", Moment4);
+fprintf("\nVariance:%.5f", Var);
+fprintf("\nSecon:%.5f", Moment2);
+fprintf("\nAverage idle time: %.5f", avg_idle_time);
+fprintf("\n");
 
