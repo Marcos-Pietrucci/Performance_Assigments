@@ -60,12 +60,17 @@ end
 figure(1)
 plot([m_inf:m_sup], [pearson_coef],['-','r'])
 title('Pearson Correlation coefficient of Trace1');
+xlabel('Lag');
+ylabel('Pearson C. C.');
 grid
 
 %Plotting the CDF
 figure(2)
 plot(sDataSet, [1:N]/N, ['-','r']);
 title('Pearson Correlation coefficient of Trace1');
+xlabel('Values');
+ylabel('Probability');
+
 grid
 
 %%%%%%%%%%%% Presenting %%%%%%%%%%%%
