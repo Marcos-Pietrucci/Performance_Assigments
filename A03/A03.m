@@ -1,4 +1,5 @@
 % Marcos Vinicius Firmino Pietrucci
+% 10914211
 % Assigment 3
 
 %Reading the Traces
@@ -58,7 +59,7 @@ while m ~= m_sup +1
 end
 
 figure(1)
-plot([m_inf:m_sup], [pearson_coef],['-','r'])
+plot([m_inf:m_sup], [pearson_coef],['-','b'])
 title('Pearson Correlation coefficient of Trace1');
 xlabel('Lag');
 ylabel('Pearson C. C.');
@@ -67,10 +68,9 @@ grid
 %Plotting the CDF
 figure(2)
 plot(sDataSet, [1:N]/N, ['-','r']);
-title('Pearson Correlation coefficient of Trace1');
+title('Cumulative Distribution Function Trace1');
 xlabel('Values');
 ylabel('Probability');
-
 grid
 
 %%%%%%%%%%%% Presenting %%%%%%%%%%%%
