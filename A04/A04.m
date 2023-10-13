@@ -12,8 +12,14 @@ sDataSet = sort(DataSet);
 N = length(sDataSet);
 
 %Calculating the moments
-Mean = sum(DataSet)/N;
-Moment2 = sum(DataSet .^2)/N;
-Moment3 = sum(DataSet .^3)/N;
+Mean = sum(sDataSet)/N;
+Moment2 = sum(sDataSet .^2)/N;
+Moment3 = sum(sDataSet .^3)/N;
 
 %Fitting the Exponential
+lambda = 1/Mean;
+t = [0:60];
+figure(1)
+plot(sDataSet, [1:N]/N, ".", t, Exp_cdf(t, [lambda]))
+legend({'DataSet','Exponential CDF'},'Location','southeast')
+grid
