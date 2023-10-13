@@ -12,7 +12,8 @@ sDataSet = sort(DataSet);
 N = length(sDataSet);
 
 %Calculating the moments
-Mean = sum(sDataSet)/N;
-Moment2 = sum(sDataSet .^2)/N;
-Moment3 = sum(sDataSet .^3)/N;
+Mean = sum(DataSet)/N;
+Moment2 = sum(DataSet .^2)/N;
+Moment3 = sum(DataSet .^3)/N;
 
+%Fitting the Exponential
