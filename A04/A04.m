@@ -3,14 +3,14 @@
 % Assigment 4
 
 %Reading the Traces
-DataSet = csvread('Trace1.csv');
+DataSet = csvread('Trace2.csv');
 % DataSet = csvread('Trace2.csv');
 % DataSet = csvread('Trace3.csv');
 
 %Creating the DataSet
 sDataSet = sort(DataSet);
 N = length(sDataSet);
-t = [0:60]; %for intervals
+t = [0:600]; %for intervals
 
 %Calculating the moments
 Mean = sum(sDataSet)/N;
@@ -45,6 +45,20 @@ if coef_var < 1 %Only available if the Cv is less than 1
     plot(sDataSet, [1:N]/N, ".", t, HypoExp_cdf(t, [parameters]))
     legend({'DataSet','Hypo Exponential'},'Location','southeast')
     title('Hypo Exponential Trace1');
+    grid
+end
+
+%Hyper_Exponential using MLE method
+if coef_var > 1 %Only available if the Cv is less than 1
+    p1 = 0.4;
+    lambda1 = 0.8/Mean;
+    lambda2 = 1.2/Mean;
+    parameters = mle(DataSet, 'pdf', @(DataSet, lambda1, lambda2, p1)HyperExp_pdf(DataSet,[lambda1, lambda2, p1]), ...
+        'Start', [lambda1,lambda2, p1]);
+    figure(4)
+    plot(sDataSet, [1:N]/N, ".", t, HyperExp_cdf(t, [parameters]))
+    legend({'DataSet','Hyper Exponential'},'Location','southeast')
+    title('Hyper Exponential Trace1');
     grid
 end
 
