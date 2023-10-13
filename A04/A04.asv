@@ -35,5 +35,9 @@ legend({'DataSet','Exponential Distribution'},'Location','southeast')
 title('Exponential Distribution Trace1');
 grid
 
+%Hypo-Exponential using MLE method
+lambda1 = 1/(0.3*Mean);
+lambda2 = 1/(0.7*Mean);
+parameters = mle(DataSet, 'pdf', @(DataSet, lambda1, lambda2)HypoExp_pdf(DataSet,[lambda1, lambda2), ...
+    'Start', [lambda1,lambda2])
 
-%Hyper-Exponential/Hypo-Exponentio

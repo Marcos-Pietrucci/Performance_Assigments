@@ -35,5 +35,17 @@ legend({'DataSet','Exponential Distribution'},'Location','southeast')
 title('Exponential Distribution Trace1');
 grid
 
+%Hypo-Exponential using MLE method
+if coef_var < 1 %Only available if the Cv is less than 1
+    lambda1 = 1/(0.3*Mean);
+    lambda2 = 1/(0.7*Mean);
+    parameters = mle(DataSet, 'pdf', @(DataSet, lambda1, lambda2)HypoExp_pdf(DataSet,[lambda1, lambda2]), ...
+        'Start', [lambda1,lambda2]);
+    figure(3)
+    plot(sDataSet, [1:N]/N, ".", t, HypoExp_cdf(t, [parameters]))
+    legend({'DataSet','Hypo Exponential'},'Location','southeast')
+    title('Hypo Exponential Trace1');
+    grid
+end
 
-%Hyper-Exponential/Hypo-Exponential using MLE method
+
