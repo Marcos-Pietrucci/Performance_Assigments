@@ -48,6 +48,12 @@ title('Erlang Distribution Trace1');
 grid
 
 %Fitting the Weibull
+syms c a
+initial_guess_a = 1;
+initial_guess_b = 1;
+equation1 = sample_mean == c * gamma(1 + 1/a);
+equation2 = sample_variance == c^2 * (gamma(1 + 2/a) - (gamma(1 + 1/a))^2);
+weibull_params = vpasolve([equation1, equation2], [c, a], [initial_guess_a, initial_guess_b]);
 
 %Hypo-Exponential using MLE method
 if coef_var < 1 %Only available if the Cv is less than 1
