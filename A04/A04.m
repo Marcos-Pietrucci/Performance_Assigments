@@ -10,7 +10,7 @@ DataSet = csvread('Trace1.csv');
 %Creating the DataSet
 sDataSet = sort(DataSet);
 N = length(sDataSet);
-t = [0:600]; %for intervals
+t = [0:60]; %for intervals
 
 %Calculating the moments
 Mean = sum(sDataSet)/N;
@@ -23,12 +23,12 @@ left_boundary = Mean - sqrt(12*(Moment2 - Mean^2))/2;
 right_boundary = Mean + sqrt(12*(Moment2 - Mean^2))/2;
 
 %Fitting the Exponential using direct expressions
-expl_lambda = 1/Mean;
+exp_lambda = 1/Mean;
 
 %Fitting the Erlang distribution
 k = round(1/coef_var^2);
 lambda_erlang = k/Mean;
-small_set = sDataSet(1:601);
+small_set = sDataSet(1:length(t));
 cdf_erlang = cdf('Gamma',small_set, k, lambda_erlang);
 cdf_erlang = transpose(cdf_erlang);
 
@@ -62,5 +62,12 @@ lambda2 = 1.2/Mean;
 hyper_parameters = mle(DataSet, 'pdf', @(DataSet, lambda1, lambda2, p1)HyperExp_pdf(DataSet,[lambda1, lambda2, p1]), ...
     'Start', [lambda1,lambda2, p1]);
 
+%%%%%%%%%%%%%%% PLOTING RESULTS %%%%%%%%%%%%%%%
+
+plot(sDataSet, [1:N]/N, ".", t, Unif_cdf(t, [left_boundary, right_boundary]), ...
+    t, Exp_cdf(t, [exp_lambda]), ...
+    t, cdf_erlang, ...
+    t, wblcdf(t, weib_scale, weib_shape))
+legend({'DataSet','Uniform', 'Exponential','Erlang', 'Weibull'},'Location','southeast')
 
 
