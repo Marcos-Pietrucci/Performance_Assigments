@@ -5,12 +5,11 @@
 %Reading the Traces
 DataSet = csvread('Trace1.csv');
 % DataSet = csvread('Trace2.csv');
-% DataSet = csvread('Trace3.csv');
 
 %Creating the DataSet
 sDataSet = sort(DataSet);
 N = length(sDataSet);
-t = [0:60]; %for intervals
+t = [0:150]; %for intervals
 
 %Calculating the moments
 Mean = sum(sDataSet)/N;
@@ -28,14 +27,12 @@ exp_lambda = 1/Mean;
 %Fitting the Erlang distribution
 k = round(1/coef_var^2);
 lambda_erlang = k/Mean;
-cdf_erlang = gamcdf(t,k, 1/lambda_erlang);
 
 %Fitting the Weibull
 syms scale shape
-initial_guess = 1;
-equation1 = Mean == scale * gamma(1 + 1/shape); %Defiing first moment equation
-equation2 = Moment2 ==  (scale^2) * gamma(1 + 2/shape); %Second moment (variance) 
-weibull_params = vpasolve([equation1, equation2], [scale, shape], [initial_guess, initial_guess]);
+eq1 = Mean == scale * gamma(1 + 1/shape); %Defiing first moment equation
+eq2 = Moment2 == (scale^2) * gamma(1 + 2/shape); %Second moment
+weibull_params = vpasolve([eq1, eq2], [scale, shape], [1,1]);
 weib_scale = double(weibull_params.scale);
 weib_shape = double(weibull_params.shape);
 
@@ -67,7 +64,7 @@ if coef_var < 1 %Only available if the Cv is less than 1
     figure(1)
     plot(sDataSet, [1:N]/N, ".", t, Unif_cdf(t, [left_boundary, right_boundary]), ...
         t, Exp_cdf(t, [exp_lambda]), ...
-        t, cdf_erlang, ...
+        t, gamcdf(t,k, 1/lambda_erlang), ...
         t, wblcdf(t, weib_scale, weib_shape), ...
         t, HypoExp_cdf(t, [hypo_parameters]), ...
         t, Pareto_cdf(t, [alpha_pareto, m_pareto]))
@@ -81,11 +78,12 @@ if coef_var > 1 %Only available if the Cv is less than 1
     figure(1)
     plot(sDataSet, [1:N]/N, ".", t, Unif_cdf(t, [left_boundary, right_boundary]), ...
         t, Exp_cdf(t, [exp_lambda]), ...
-        t, cdf_erlang, ...
-        t, wblcdf(t, weib_scale, weib_shape), ...
+        t, gamcdf(t, k, 1/lambda_erlang), ...
+        t, wblcdf(t, 5.75773, 2.12057), ...
         t, HyperExp_cdf(t, [hyper_parameters]), ...
-        t, gpcdf(t,m_pareto,alpha_pareto))
-    legend({'DataSet','Uniform', 'Exponential','Erlang', 'Weibull', 'HyperExponential'},'Location','southeast')
+        t, Pareto_cdf(t, [alpha_pareto, m_pareto]))
+        
+    legend({'DataSet','Uniform', 'Exponential','Erlang', 'Weibull', 'HyperExponential', 'Pareto'},'Location','southeast')
     title('CDF distributions Trace 2');
     grid
 end

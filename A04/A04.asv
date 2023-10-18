@@ -3,9 +3,8 @@
 % Assigment 4
 
 %Reading the Traces
-DataSet = csvread('Trace1.csv');
+DataSet = csvread('Trace2.csv');
 % DataSet = csvread('Trace2.csv');
-% DataSet = csvread('Trace3.csv');
 
 %Creating the DataSet
 sDataSet = sort(DataSet);
@@ -70,8 +69,8 @@ if coef_var < 1 %Only available if the Cv is less than 1
         t, cdf_erlang, ...
         t, wblcdf(t, weib_scale, weib_shape), ...
         t, HypoExp_cdf(t, [hypo_parameters]), ...
-        t, HyperExp_cdf(t, [hyper_parameters]))
-    legend({'DataSet','Uniform', 'Exponential','Erlang', 'Weibull', 'HypoExponential'},'Location','southeast')
+        t, Pareto_cdf(t, [alpha_pareto, m_pareto]))
+    legend({'DataSet','Uniform', 'Exponential','Erlang', 'Weibull', 'HypoExponential', 'Pareto'},'Location','southeast')
     title('CDF distributions Trace 1');
     grid
 end
@@ -82,11 +81,28 @@ if coef_var > 1 %Only available if the Cv is less than 1
     plot(sDataSet, [1:N]/N, ".", t, Unif_cdf(t, [left_boundary, right_boundary]), ...
         t, Exp_cdf(t, [exp_lambda]), ...
         t, cdf_erlang, ...
-        t, wblcdf(t, weib_scale, weib_shape), ...
-        , ...
-        t, HyperExp_cdf(t, [hyper_parameters]))
-    legend({'DataSet','Uniform', 'Exponential','Erlang', 'Weibull', 'HypoExponential'},'Location','southeast')
-    title('CDF distributions Trace 1');
+        %t, wblcdf(t, weib_scale, weib_shape))%, ...
+        %t, HyperExp_cdf(t, [hyper_parameters]))
+        %t, Pareto_cdf(t, [alpha_pareto, m_pareto]) ...
+        
+    legend({'DataSet','Uniform', 'Exponential','Erlang', 'Weibull', 'HyperExponential', 'Pareto'},'Location','southeast')
+    title('CDF distributions Trace 2');
     grid
+end
+
+
+function F = Pareto_cdf(x, p)
+	alpha = p(1); %alpha value (shape)
+	m = p(2); %m value (scale)
+    
+    i = 1;
+    while i ~= length(x)  + 1
+        if(x(i) >= m)
+	        F(i) = 1 - (m/x(i))^alpha;
+        else
+            F(i) = 0;
+        end
+        i = i+1;
+    end
 end
 
