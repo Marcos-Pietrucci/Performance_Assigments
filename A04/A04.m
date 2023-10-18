@@ -28,9 +28,7 @@ exp_lambda = 1/Mean;
 %Fitting the Erlang distribution
 k = round(1/coef_var^2);
 lambda_erlang = k/Mean;
-small_set = sDataSet(1:length(t));
-cdf_erlang = cdf('Gamma',small_set, k, lambda_erlang);
-cdf_erlang = transpose(cdf_erlang);
+cdf_erlang = gamcdf(t,k, 1/lambda_erlang);
 
 %Fitting the Weibull
 syms scale shape
@@ -64,10 +62,47 @@ hyper_parameters = mle(DataSet, 'pdf', @(DataSet, lambda1, lambda2, p1)HyperExp_
 
 %%%%%%%%%%%%%%% PLOTING RESULTS %%%%%%%%%%%%%%%
 
-plot(sDataSet, [1:N]/N, ".", t, Unif_cdf(t, [left_boundary, right_boundary]), ...
-    t, Exp_cdf(t, [exp_lambda]), ...
-    t, cdf_erlang, ...
-    t, wblcdf(t, weib_scale, weib_shape))
-legend({'DataSet','Uniform', 'Exponential','Erlang', 'Weibull'},'Location','southeast')
+%Checking fro the existance of hypo exponential
+if coef_var < 1 %Only available if the Cv is less than 1
+    figure(1)
+    plot(sDataSet, [1:N]/N, ".", t, Unif_cdf(t, [left_boundary, right_boundary]), ...
+        t, Exp_cdf(t, [exp_lambda]), ...
+        t, cdf_erlang, ...
+        t, wblcdf(t, weib_scale, weib_shape), ...
+        t, HypoExp_cdf(t, [hypo_parameters]), ...
+        t, Pareto_cdf(t, [alpha_pareto, m_pareto]))
+    legend({'DataSet','Uniform', 'Exponential','Erlang', 'Weibull', 'HypoExponential', 'Pareto'},'Location','southeast')
+    title('CDF distributions Trace 1');
+    grid
+end
 
+%Checking for existance of HyperExponential
+if coef_var > 1 %Only available if the Cv is less than 1
+    figure(1)
+    plot(sDataSet, [1:N]/N, ".", t, Unif_cdf(t, [left_boundary, right_boundary]), ...
+        t, Exp_cdf(t, [exp_lambda]), ...
+        t, cdf_erlang, ...
+        t, wblcdf(t, weib_scale, weib_shape), ...
+        t, HyperExp_cdf(t, [hyper_parameters]), ...
+        t, gpcdf(t,m_pareto,alpha_pareto))
+    legend({'DataSet','Uniform', 'Exponential','Erlang', 'Weibull', 'HyperExponential'},'Location','southeast')
+    title('CDF distributions Trace 2');
+    grid
+end
+
+
+function F = Pareto_cdf(x, p)
+	alpha = p(1); %alpha value (shape)
+	m = p(2); %m value (scale)
+    
+    i = 1;
+    while i ~= length(x)  + 1
+        if(x(i) >= m)
+	        F(i) = 1 - (m/x(i))^alpha;
+        else
+            F(i) = 0;
+        end
+        i = i+1;
+    end
+end
 

@@ -10,7 +10,7 @@ DataSet = csvread('Trace1.csv');
 %Creating the DataSet
 sDataSet = sort(DataSet);
 N = length(sDataSet);
-t = [0:600]; %for intervals
+t = [0:60]; %for intervals
 
 %Calculating the moments
 Mean = sum(sDataSet)/N;
@@ -23,14 +23,12 @@ left_boundary = Mean - sqrt(12*(Moment2 - Mean^2))/2;
 right_boundary = Mean + sqrt(12*(Moment2 - Mean^2))/2;
 
 %Fitting the Exponential using direct expressions
-expl_lambda = 1/Mean;
+exp_lambda = 1/Mean;
 
 %Fitting the Erlang distribution
 k = round(1/coef_var^2);
 lambda_erlang = k/Mean;
-small_set = sDataSet(1:601);
-cdf_erlang = cdf('Gamma',small_set, k, lambda_erlang);
-cdf_erlang = transpose(cdf_erlang);
+cdf_erlang = gamcdf(t,k, 1/lambda_erlang);
 
 %Fitting the Weibull
 syms scale shape
@@ -64,9 +62,31 @@ hyper_parameters = mle(DataSet, 'pdf', @(DataSet, lambda1, lambda2, p1)HyperExp_
 
 %%%%%%%%%%%%%%% PLOTING RESULTS %%%%%%%%%%%%%%%
 
-plot(sDataSet, [1:N]/N, ".", t, Unif_cdf(t, [left_boundary, right_boundary]), ...
-    t, Exp_cdf(t, [lambda]) ...
-    t, cdf_erlang, ...
-    t,);
+%Checking fro the existance of hypo exponential
+if coef_var < 1 %Only available if the Cv is less than 1
+    figure(1)
+    plot(sDataSet, [1:N]/N, ".", t, Unif_cdf(t, [left_boundary, right_boundary]), ...
+        t, Exp_cdf(t, [exp_lambda]), ...
+        t, cdf_erlang, ...
+        t, wblcdf(t, weib_scale, weib_shape), ...
+        t, HypoExp_cdf(t, [hypo_parameters]), ...
+        t, HyperExp_cdf(t, [hyper_parameters]))
+    legend({'DataSet','Uniform', 'Exponential','Erlang', 'Weibull', 'HypoExponential'},'Location','southeast')
+    title('CDF distributions Trace 1');
+    grid
+end
 
+%Checking for existance of HyperExponential
+if coef_var > 1 %Only available if the Cv is less than 1
+    figure(1)
+    plot(sDataSet, [1:N]/N, ".", t, Unif_cdf(t, [left_boundary, right_boundary]), ...
+        t, Exp_cdf(t, [exp_lambda]), ...
+        t, cdf_erlang, ...
+        t, wblcdf(t, weib_scale, weib_shape), ...
+        , ...
+        t, HyperExp_cdf(t, [hyper_parameters]))
+    legend({'DataSet','Uniform', 'Exponential','Erlang', 'Weibull', 'HypoExponential'},'Location','southeast')
+    title('CDF distributions Trace 1');
+    grid
+end
 
