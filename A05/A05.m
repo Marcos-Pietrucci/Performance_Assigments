@@ -29,6 +29,9 @@ k_erl = 4;
 lambda_erl = 0.4;
 hypo_l1 = 0.5;
 hypo_l2 = 0.125;
+hyper_l1 = 0.5;
+hyper_l2 = 0.05;
+hyper_p = 0.55;
 
 %Exponential
 exponential = zeros(1,N);
@@ -65,3 +68,9 @@ end
 figure(4);
 plot(sort(hypoExp), [1:5000]/5000, '.');
 grid
+
+%HyperExponential
+prob = []
+lambda = [hyper_l1,hyper_l2,hyper_p1];
+cp = cumsum(prob);
+NC = 3;
