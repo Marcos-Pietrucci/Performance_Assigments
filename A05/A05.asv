@@ -23,10 +23,28 @@ random_nums = random_nums/m;
 %%% Generating distributions with random values %%%%%
 range = [1:N]/N;
 lambda_exp = 0.1;
-%Applying the inverse function and them isolation the u
+alpha_p = 1.5;
+m_p = 5;
+k_erl = 4;
+lambda_erl = 0.4;
 i = 1;
+
+%Applying the formulas from slides
 exponential = zeros(1,N);
-while i <= length(N)
-    exponential(i) = -log(1-random_nums(i))/lambda_exp;
+exponential = -log(random_nums)./lambda_exp;
+plot(sort(exponential), range, '.');
+
+pareto = zeros(1,N);
+pareto = m_p ./ ((random_nums).^(1/alpha_p));
+plot(sort(pareto), range, '.');
+
+erlang = zeros(1,N);
+value = 1;
+i = 1;
+while i <= N
+    while j <= k_
+    value = value*random_nums(i);
 end
+
+plot(sort(erlang), range, '.');
 

@@ -25,14 +25,26 @@ range = [1:N]/N;
 lambda_exp = 0.1;
 alpha_p = 1.5;
 m_p = 5;
+k_erl = 4;
+lambda_erl = 0.4;
 i = 1;
 
 %Applying the formulas from slides
 exponential = zeros(1,N);
 exponential = -log(random_nums)./lambda_exp;
-plot(sort(exponential), range, '.');
 
 pareto = zeros(1,N);
 pareto = m_p ./ ((random_nums).^(1/alpha_p));
-plot(sort(pareto), range, '.');
 
+erlang = zeros(1,N/k_erl);
+aux = zeros(1,N/k_erl);
+value = 1;
+i = 1;
+while i <= N/k_erl
+    aux(1:4,i) = random_nums(((i-1)*4+1):((i-1)*4+1) + 3);
+    i = i+1;
+end
+erlang = -log(prod(aux)) ./ lambda_erl;
+figure(3);
+plot(sort(erlang), [1:2500]/2500, '.');
+grid
