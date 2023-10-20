@@ -27,15 +27,18 @@ alpha_p = 1.5;
 m_p = 5;
 k_erl = 4;
 lambda_erl = 0.4;
-i = 1;
+hypo_l1 = 0.5;
+hypo_l2 = 0.125;
 
-%Applying the formulas from slides
+%Exponential
 exponential = zeros(1,N);
 exponential = -log(random_nums)./lambda_exp;
 
+%Pareto
 pareto = zeros(1,N);
 pareto = m_p ./ ((random_nums).^(1/alpha_p));
 
+%Erlang
 erlang = zeros(1,N/k_erl);
 aux = zeros(1,N/k_erl);
 value = 1;
@@ -47,4 +50,18 @@ end
 erlang = -log(prod(aux)) ./ lambda_erl;
 figure(3);
 plot(sort(erlang), [1:2500]/2500, '.');
+grid
+
+%HypoExponential
+hypoExp = zeros(1, N/2);
+exponential_aux = -log(random_nums);
+i = 1;
+index_aux = 1;
+while i <= N
+    hypoExp (index_aux) = exponential_aux(i)/hypo_l1 + exponential_aux(i+1)/hypo_l2;
+    i = i + 2;
+    index_aux = index_aux + 1;
+end
+figure(4);
+plot(sort(hypoExp), [1:5000]/5000, '.');
 grid
