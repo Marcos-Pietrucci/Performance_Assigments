@@ -18,11 +18,21 @@ while i <= N
     random_nums(i) = mod(a*random_nums(i-1) + c, m);
     i = i + 1;
 end
-random_nums = random_nums / m;
+random_nums = random_nums/m;
 
+%%% Generating distributions with random values %%%%%
+range = [1:N]/N;
+lambda_exp = 0.1;
+alpha_p = 1.5;
+m_p = 5;
+i = 1;
 
+%Applying the formulas from slides
+exponential = zeros(1,N);
+exponential = -log(random_nums)./lambda_exp;
+plot(sort(exponential), range, '.');
 
-
-
-
+pareto = zeros(1,N);
+pareto = m_p ./ ((random_nums).^(1/alpha_p));
+plot(sort(pareto), range, '.');
 

@@ -3,10 +3,30 @@
 % Assigment 5
 
 %%% Generate 10000 random numbers using Lin. Cong. Gen.
-i = 1;
 N = 10000;
-while i ~=
+m = 2^32; %Given values
+a = 1664525;
+c = 1013904223;
+seed = 521191478;
+random_nums = zeros(1, 10000);
 
+%First random value
+x = mod(a*seed + c, m);
+random_nums(1) = x;
+i = 2;
+while i <= N
+    random_nums(i) = mod(a*random_nums(i-1) + c, m);
+    i = i + 1;
+end
+random_nums = random_nums/m;
 
-
+%%% Generating distributions with random values %%%%%
+range = [1:N]/N;
+lambda_exp = 0.1;
+%Applying the inverse function and them isolation the u
+i = 1;
+exponential = zeros(1,N);
+while i <= length(N)
+    exponential(i) = -log(1-random_nums(i))/lambda_exp;
+end
 
