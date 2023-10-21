@@ -116,24 +116,23 @@ cost1 = 0.01; %$ per GB if the file is less than 10GB
 cost2 = 0.02; %$ per GB if the file is more than 10GB
 cost = [cost1,cost2];
 
-% Exponential Distribution
+% Exponential cost
 exp_cost = sum(exponential_emp * cost(1) .* (exponential_emp < 10) ...
                     + exponential_emp* cost(2) .* (exponential_emp >= 10));
-% Pareto Distribution
+% Pareto cost
 pareto_cost = sum(pareto_emp * cost(1) .* (pareto_emp < 10) ...
                     + pareto_emp* cost(2) .* (pareto_emp > 10));
-% Erlang Distribution
+% Erlang cost
 erlang_cost = sum(erlang_emp * cost(1) .* (erlang_emp < 10) ...
                     + erlang_emp* cost(2) .* (erlang_emp > 10));
-% Hypo-Exponential Distribution
+% HypoExp Distribution cost
 hypo_cost = sum(hypoExp_emp * cost(1) .* (hypoExp_emp < 10) ...
                     + hypoExp_emp* cost(2) .* (hypoExp_emp > 10));
-% Hyper-Exponential Distribution
+% HyperExp Distribution cost
 hyper_cost = sum(hyperExp_emp * cost(1) .* (hyperExp_emp < 10) ...
                     + hyperExp_emp* cost(2) .* (hyperExp_emp > 10));
 
 %%%%%% Presenting the results %%%%%%
-
 fprintf("\n");
 fprintf("\nFirst generated random value: %.5f", random_nums(1));
 fprintf("\nSecond generated random value: %.5f", random_nums(2));
