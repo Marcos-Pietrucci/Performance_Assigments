@@ -8,16 +8,16 @@ m = 2^32; %Given values
 a = 1664525;
 c = 1013904223;
 seed = 521191478;
-random_nums = zeros(1, 10000);
+random_nums = zeros(1, N);
 
-x = mod(a*seed + c, m) / m; %The first "random" value
-random_nums(1) = x;
+x = seed; %The first "random" value
+random_nums(1) = x/m;
 i = 2;
 while i <= N %Calculating all the others
-    random_nums(i) = mod(a*random_nums(i-1) + c, m);
+    x = mod(a*x + c, m);
+    random_nums(i) = x/m;
     i = i + 1;
 end
-random_nums = random_nums/m;
 
 %%% Generating distributions with random values %%%%%
 t = [1:10000]/400; % A lot of points from 0 to 25
@@ -154,6 +154,16 @@ function F = Pareto_cdf(x, p)
             F(i) = 0;
         end
         i = i+1;
+    end
+end
+
+function samples = linear_congruential_generator(m, a, c, seed, n)
+    samples = zeros(1, n);
+    x = seed;
+
+    for i = 1:n
+        x = mod(a * x + c, m);
+        samples(i) = x / m;
     end
 end
 
