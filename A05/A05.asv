@@ -35,10 +35,10 @@ hyper_p = 0.55;
 
 %Exponential
 exponential = zeros(1,N);
-t = [1:2000] / 20;
+t = [1:200] / 2;
 exponential = -log(random_nums)./lambda_exp;
 figure(1)
-plot(sort(exponential),[1:10000]/10000, ".", t, Exp_cdf(t, [lambda_exp]),"-")
+plot([1:N]/N, sort(exponential),'.', Exp_cdf([1:N]/N, [lambda_exp]), [1:N]/N, '-');
 title("Exponential");
 grid
 
@@ -57,23 +57,23 @@ while i <= N/k_erl
 end
 erlang = -log(prod(aux)) ./ lambda_erl;
 figure(3);
-plot(sort(erlang), [1:2500]/2500, '.', t, gamcdf(t, k_erl, 1/lambda_erl), '-');
+plot(sort(erlang), [1:2500]/2500, '.')%, gamcdf([1:2500]/2500, k_erl, lambda_erl), [1:2500]/2500, '-'));
 title("Erlang");
 grid
 
 %HypoExponential
 hypoExp = zeros(1, N/2);
-exponential_aux = -log(random_nums);
+sRandom_Nums = sort(random_nums);
+exponential_aux = -log(sRandom_Nums);
 i = 1;
 index_aux = 1;
-while i <= N
-    hypoExp (index_aux) = exponential_aux(i)/hypo_l1 + exponential_aux(i+1)/hypo_l2;
-    i = i + 2;
-    index_aux = index_aux + 1;
+while i <= N/2
+    hypoExp (i) = exponential_aux(i)/hypo_l1 + exponential_aux(N/2+i)/hypo_l2;
+    i = i + 1;
 end
 figure(4);
 plot(sort(hypoExp), [1:5000]/5000, '.', ...
-    t, HypoExp_cdf(t, [hypo_l1, hypo_l2]), '-');
+    [1:5000]/5000, HypoExp_cdf([1:5000]/5000, [hypo_l1, hypo_l2]), '-');
 title("HypoExp");
 grid
 
@@ -81,18 +81,19 @@ grid
 hyperExp = zeros(1, N/2);
 prob = hyper_p;
 lambda = [hyper_l1,hyper_l2, hyper_p];
+sRandom_Nums = sort(random_nums);
 
 for i=1:(N/2)
-    if random_nums(i) <= prob
-        hyperExp(i) = - log(random_nums(5000+i))/lambda(1);
+    if sRandom_Nums(i) <= prob
+        hyperExp(i) = - log(sRandom_Nums(5000+i))/lambda(1);
     else
-        hyperExp(i) = - log(random_nums(5000+i))/lambda(2);
+        hyperExp(i) = - log(sRandom_Nums(5000+i))/lambda(2);
     end
 end
 
 figure(5);
 plot(sort(hyperExp), [1:5000]/5000, '.', ...
-    t, HyperExp_cdf(t, [lambda]), '-');
+    [1:5000]/5000, HyperExp_cdf([1:5000]/5000, [lambda]), '-');
 title("HyperExp");
 grid
 
