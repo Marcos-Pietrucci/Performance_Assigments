@@ -135,6 +135,9 @@ hyper_cost = sum(hyperExp_emp * cost(1) .* (hyperExp_emp < 10) ...
 %%%%%% Presenting the results %%%%%%
 
 fprintf("\n");
+fprintf("\nFirst generated random value: %.5f", random_nums(1));
+fprintf("\nSecond generated random value: %.5f", random_nums(2));
+fprintf("\nThird generated random value: %.5f", random_nums(3));
 fprintf("\nFile N1 cost: $%.2f", exp_cost);
 fprintf("\nFile N2 cost: $%.2f", pareto_cost);
 fprintf("\nFile N3 cost: $%.2f", erlang_cost);

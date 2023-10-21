@@ -8,17 +8,16 @@ m = 2^32; %Given values
 a = 1664525;
 c = 1013904223;
 seed = 521191478;
-random_nums = zeros(1, 10000);
+random_nums = zeros(1, N);
 
-%First random value
-x = mod(a*seed + c, m);
-random_nums(1) = x;
+x = seed; %The first "random" value
+random_nums(1) = x/m;
 i = 2;
-while i <= N
-    random_nums(i) = mod(a*random_nums(i-1) + c, m);
+while i <= N %Calculating all the others
+    x = mod(a*x + c, m);
+    random_nums(i) = x/m;
     i = i + 1;
 end
-random_nums = random_nums/m;
 
 %%% Generating distributions with random values %%%%%
 t = [1:10000]/400; % A lot of points from 0 to 25
@@ -38,7 +37,7 @@ exponential_emp = zeros(1,N);
 exponential_emp = -log(random_nums)./lambda_exp;
 figure(1)
 plot(sort(exponential_emp),[1:N]/N, ".", t, Exp_cdf(t, [lambda_exp]),"-")
-title("Exponential");
+title("Exponential - N1");
 xlim([0 25]);
 legend({'Empirical','Theoretical'},'Location','southeast')
 grid
@@ -49,7 +48,7 @@ pareto_emp = m_p ./ ((random_nums).^(1/alpha_p));
 
 figure(2)
 plot(sort(pareto_emp), [1:N]/N, '.', t, Pareto_cdf(t, [alpha_p, m_p]), '-');
-title("Pareto");
+title("Pareto  - N2");
 legend({'Empirical','Theoretical'},'Location','southeast')
 xlim([0 25])
 grid
@@ -59,14 +58,16 @@ erlang_emp = zeros(1,N/k_erl);
 aux = zeros(1,N/k_erl);
 value = 1;
 i = 1;
+    %Here I am dividing the 10000 values into 4x2500 just like in class
 while i <= N/k_erl
     aux(1:4,i) = random_nums(((i-1)*4+1):((i-1)*4+1) + 3);
     i = i+1;
 end
+    %Than using prod just  like in class
 erlang_emp = -log(prod(aux)) ./ lambda_erl;
 figure(3);
 plot(sort(erlang_emp), [1:2500]/2500, '.', t, gamcdf(t, k_erl, 1/lambda_erl), '-');
-title("Erlang");
+title("Erlang  - N3");
 xlim([0 25]);
 legend({'Empirical','Theoretical'},'Location','southeast')
 grid
@@ -84,7 +85,7 @@ end
 figure(4);
 plot(sort(hypoExp_emp), [1:5000]/5000, '.', ...
     t, HypoExp_cdf(t, [hypo_l1, hypo_l2]), '-');
-title("HypoExp");
+title("HypoExp  - N4");
 legend({'Empirical','Theoretical'},'Location','southeast');
 xlim([0 25]);
 grid
@@ -105,7 +106,7 @@ end
 figure(5);
 plot(sort(hyperExp_emp), [1:5000]/5000, '.', ...
     t, HyperExp_cdf(t, [lambda]), '-');
-title("HyperExp");
+title("HyperExp  - N5");
 xlim([0 25]);
 legend({'Empirical','Theoretical'},'Location','southeast');
 grid
@@ -120,20 +121,22 @@ exp_cost = sum(exponential_emp * cost(1) .* (exponential_emp < 10) ...
                     + exponential_emp* cost(2) .* (exponential_emp >= 10));
 % Pareto Distribution
 pareto_cost = sum(pareto_emp * cost(1) .* (pareto_emp < 10) ...
-                    + pareto_emp* cost(2) .* (pareto_emp >= 10));
+                    + pareto_emp* cost(2) .* (pareto_emp > 10));
 % Erlang Distribution
 erlang_cost = sum(erlang_emp * cost(1) .* (erlang_emp < 10) ...
-                    + erlang_emp* cost(2) .* (erlang_emp >= 10));
+                    + erlang_emp* cost(2) .* (erlang_emp > 10));
 % Hypo-Exponential Distribution
 hypo_cost = sum(hypoExp_emp * cost(1) .* (hypoExp_emp < 10) ...
-                    + hypoExp_emp* cost(2) .* (hypoExp_emp >= 10));
+                    + hypoExp_emp* cost(2) .* (hypoExp_emp > 10));
 % Hyper-Exponential Distribution
-hyper_cost = sum(hyperExp_emp * cost(1) .* (hyperExp_emp <= 10) ...
+hyper_cost = sum(hyperExp_emp * cost(1) .* (hyperExp_emp < 10) ...
                     + hyperExp_emp* cost(2) .* (hyperExp_emp > 10));
 
 %%%%%% Presenting the results %%%%%%
 
 fprintf("\n");
+fprintf("\nFirst generated random value: %.5f", random_nums(1));
+
 fprintf("\nFile N1 cost: $%.2f", exp_cost);
 fprintf("\nFile N2 cost: $%.2f", pareto_cost);
 fprintf("\nFile N3 cost: $%.2f", erlang_cost);
@@ -153,6 +156,16 @@ function F = Pareto_cdf(x, p)
             F(i) = 0;
         end
         i = i+1;
+    end
+end
+
+function samples = linear_congruential_generator(m, a, c, seed, n)
+    samples = zeros(1, n);
+    x = seed;
+
+    for i = 1:n
+        x = mod(a * x + c, m);
+        samples(i) = x / m;
     end
 end
 
