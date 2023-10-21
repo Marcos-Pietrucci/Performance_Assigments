@@ -35,16 +35,21 @@ hyper_p = 0.55;
 
 %Exponential
 exponential = zeros(1,N);
-t = [1:200] / 2;
+t = [1:] / 25;
 exponential = -log(random_nums)./lambda_exp;
 figure(1)
-plot([1:N]/N, sort(exponential),'.', Exp_cdf([1:N]/N, [lambda_exp]), [1:N]/N, '-');
+plot(sort(exponential),[1:10000]/10000, ".", t, Exp_cdf(t, [lambda_exp]),"-")
 title("Exponential");
 grid
 
 %Pareto
 pareto = zeros(1,N);
 pareto = m_p ./ ((random_nums).^(1/alpha_p));
+
+figure(6)
+plot(sort(pareto), [1:N]/N, '.', t, Pareto_cdf(t, [alpha_p, m_p]), '-');
+title("Pareto");
+grid
 
 %Erlang
 erlang = zeros(1,N/k_erl);
@@ -57,23 +62,23 @@ while i <= N/k_erl
 end
 erlang = -log(prod(aux)) ./ lambda_erl;
 figure(3);
-plot(sort(erlang), [1:2500]/2500, '.')%, gamcdf([1:2500]/2500, k_erl, lambda_erl), [1:2500]/2500, '-'));
+plot(sort(erlang), [1:2500]/2500, '.', t, gamcdf(t, k_erl, 1/lambda_erl), '-');
 title("Erlang");
 grid
 
 %HypoExponential
 hypoExp = zeros(1, N/2);
-sRandom_Nums = sort(random_nums);
-exponential_aux = -log(sRandom_Nums);
+exponential_aux = -log(random_nums);
 i = 1;
 index_aux = 1;
-while i <= N/2
-    hypoExp (i) = exponential_aux(i)/hypo_l1 + exponential_aux(N/2+i)/hypo_l2;
-    i = i + 1;
+while i <= N
+    hypoExp (index_aux) = exponential_aux(i)/hypo_l1 + exponential_aux(i+1)/hypo_l2;
+    i = i + 2;
+    index_aux = index_aux + 1;
 end
 figure(4);
 plot(sort(hypoExp), [1:5000]/5000, '.', ...
-    [1:5000]/5000, HypoExp_cdf([1:5000]/5000, [hypo_l1, hypo_l2]), '-');
+    t, HypoExp_cdf(t, [hypo_l1, hypo_l2]), '-');
 title("HypoExp");
 grid
 
@@ -81,20 +86,33 @@ grid
 hyperExp = zeros(1, N/2);
 prob = hyper_p;
 lambda = [hyper_l1,hyper_l2, hyper_p];
-sRandom_Nums = sort(random_nums);
 
 for i=1:(N/2)
-    if sRandom_Nums(i) <= prob
-        hyperExp(i) = - log(sRandom_Nums(5000+i))/lambda(1);
+    if random_nums(i) <= prob
+        hyperExp(i) = - log(random_nums(5000+i))/lambda(1);
     else
-        hyperExp(i) = - log(sRandom_Nums(5000+i))/lambda(2);
+        hyperExp(i) = - log(random_nums(5000+i))/lambda(2);
     end
 end
 
 figure(5);
 plot(sort(hyperExp), [1:5000]/5000, '.', ...
-    [1:5000]/5000, HyperExp_cdf([1:5000]/5000, [lambda]), '-');
+    t, HyperExp_cdf(t, [lambda]), '-');
 title("HyperExp");
 grid
 
+function F = Pareto_cdf(x, p)
+	alpha = p(1); %alpha value (shape)
+	m = p(2); %m value (scale)
+    
+    i = 1;
+    while i ~= length(x)  + 1
+        if(x(i) >= m)
+	        F(i) = 1 - (m/x(i))^alpha;
+        else
+            F(i) = 0;
+        end
+        i = i+1;
+    end
+end
 

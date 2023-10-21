@@ -21,7 +21,7 @@ end
 random_nums = random_nums/m;
 
 %%% Generating distributions with random values %%%%%
-range = [1:N]/N;
+t = [1:10000]/400; % A lot of points from 0 to 25
 lambda_exp = 0.1;
 alpha_p = 1.5;
 m_p = 5;
@@ -35,16 +35,24 @@ hyper_p = 0.55;
 
 %Exponential
 exponential = zeros(1,N);
-t = [1:2000] / 20;
 exponential = -log(random_nums)./lambda_exp;
 figure(1)
-plot(sort(exponential),[1:10000]/10000, ".", t, Exp_cdf(t, [lambda_exp]),"-")
+plot(sort(exponential),[1:N]/N, ".", t, Exp_cdf(t, [lambda_exp]),"-")
 title("Exponential");
+xlim([0 25]);
+legend({'Empirical','Theoretical'},'Location','southeast')
 grid
 
 %Pareto
 pareto = zeros(1,N);
 pareto = m_p ./ ((random_nums).^(1/alpha_p));
+
+figure(6)
+plot(sort(pareto), [1:N]/N, '.', t, Pareto_cdf(t, [alpha_p, m_p]), '-');
+title("Pareto");
+legend({'Empirical','Theoretical'},'Location','southeast')
+xlim([0 25])
+grid
 
 %Erlang
 erlang = zeros(1,N/k_erl);
@@ -59,6 +67,8 @@ erlang = -log(prod(aux)) ./ lambda_erl;
 figure(3);
 plot(sort(erlang), [1:2500]/2500, '.', t, gamcdf(t, k_erl, 1/lambda_erl), '-');
 title("Erlang");
+xlim([0 25]);
+legend({'Empirical','Theoretical'},'Location','southeast')
 grid
 
 %HypoExponential
@@ -75,6 +85,8 @@ figure(4);
 plot(sort(hypoExp), [1:5000]/5000, '.', ...
     t, HypoExp_cdf(t, [hypo_l1, hypo_l2]), '-');
 title("HypoExp");
+legend({'Empirical','Theoretical'},'Location','southeast');
+xlim([0 25]);
 grid
 
 %HyperExponential
@@ -94,6 +106,22 @@ figure(5);
 plot(sort(hyperExp), [1:5000]/5000, '.', ...
     t, HyperExp_cdf(t, [lambda]), '-');
 title("HyperExp");
+xlim([0 25]);
+legend({'Empirical','Theoretical'},'Location','southeast');
 grid
 
+function F = Pareto_cdf(x, p)
+	alpha = p(1); %alpha value (shape)
+	m = p(2); %m value (scale)
+    
+    i = 1;
+    while i ~= length(x)  + 1
+        if(x(i) >= m)
+	        F(i) = 1 - (m/x(i))^alpha;
+        else
+            F(i) = 0;
+        end
+        i = i+1;
+    end
+end
 
