@@ -10,16 +10,21 @@ maxK = 20000;
 M = 1000;
 DK = 100;
 MaxRelErr = 0.04;
+
+% Given parameters to generate the distributions
 l1 = 0.02;
 l2 = 0.2;
 p1 = 0.1;
+k_erl = 10;
+lamb_erl = 1.5;
+lamb_exp = 0.1;
+a_unif = 5;
+b_unif = 10;
 
 gam = 0.95;
-
 d_gamma = norminv((1+gam)/2);
 
 K = K0;
-
 tA = 0;
 tC = 0;
 
@@ -44,8 +49,12 @@ while K < maxK
         tA0 = tA;
 	    
         %%% CASE ONE RANDOM NUMBERS %%%
-        arrivals = HyperExp_cdf(M, [l1, l2, p1]);
-        services = Erlang_generator(rand(M*10, 1) , [10, 1.5]);
+        %arrivals = HyperExp_rand_generator(M, [l1, l2, p1]);
+        %services = Erlang_rand_generator(M, [k_erl, lamb_erl]);
+        
+        %%% CASE TWO RANDOM NUMBERS %%%
+        arrivals = -log(rand(M,1))./lamb_exp;
+        services = Uniform_rand_generator(M, [a_unif, b_unif]);
 
 		for j = 1:M
 		    a_ji = arrivals(j);
@@ -57,11 +66,8 @@ while K < maxK
             variance_R(j) = ri;
 
 			tA = tA + a_ji;
-			
 			Bi = Bi + s_ji;
-			
 			Wi = Wi + ri;
-
 		end
 		
         %Response time calculation
@@ -144,13 +150,21 @@ fprintf(1, "Resp. Time in [%g, %g], with %g confidence. Relative Error: %g\n", C
 fprintf(1, "Variance of the response time in [%g, %g], with %g confidence. Relative Error: %g\n", CivarR(1,1), CivarR(1,2), gam, errvarR);
 
 
+function F = Uniform_rand_generator(S, p)
+    a = p(1);
+    b = p(2);
 
-function F = HyperExp_cdf(L, p)
+    for i = 1:S
+        F(i) = a + (b-a)*rand();
+    end
+end
+
+function F = HyperExp_rand_generator(S, p)
     l1 = p(1);
 	l2 = p(2);
 	p1 = p(3);
 
-    for i = 1:L
+    for i = 1:S
         x = rand();  % Generate a random value between 0 and 1
         if x <= p1
             F(i) = -log(rand()) / l1;
@@ -160,13 +174,14 @@ function F = HyperExp_cdf(L, p)
     end
 end
 
-function F = Erlang_generator(x, p)
+function F = Erlang_rand_generator(S, p)
     k_erl = p(1);
     lambda_erl = p(2);
+    x = rand(k_erl*S, 1);
+
     product = 1;
     counter = 0;
     aux = 1;
-
     for i = 1:length(x)
         %Computing the product
         product = product * x(i);
