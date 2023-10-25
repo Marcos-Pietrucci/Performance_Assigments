@@ -27,13 +27,7 @@ U = 0;
 U2 = 0;
 R = 0;
 R2 = 0;
-X = 0;
-X2 = 0;
-N = 0;
-N2 = 0;
-variance_R = zeros(M,1);
-varR = 0;
-varR2 = 0;
+X = 0
 
 newIters = K;
 
@@ -41,21 +35,19 @@ while K < maxK
 	for i = 1:newIters
 		Bi = 0;
 		Wi = 0;
-        tA0 = tA;
+        Xi = 0;
+		tA0 = tA;
 	    
-        %%% CASE ONE RANDOM NUMBERS %%%
         arrivals = HyperExp_cdf(M, [l1, l2, p1]);
-        services = Erlang_generator(rand(M*10, 1) , [10, 1.5]);
+        services = Erlang_generator(rand(M*10, 1) , [10, 1.5]);%gamrnd(10, 1/1.5, M, 1);%
 
 		for j = 1:M
 		    a_ji = arrivals(j);
             s_ji = services(j);
 			tC = max(tA, tC) + s_ji;
 			ri = tC - tA;
-
-            %Storing all the response times
-            variance_R(j) = ri;
-
+			%Rd((i-1)*M+j,:) = ri;
+	
 			tA = tA + a_ji;
 			
 			Bi = Bi + s_ji;
@@ -68,12 +60,7 @@ while K < maxK
 		Ri = Wi / M;
 		R = R + Ri;
 		R2 = R2 + Ri^2;
-
-        %Varianace of the response rate
-        varRi = var(variance_R);
-		varR = varR + varRi;
-        varR2 = varR2 + varRi^2;
-
+		
         %Utilization calculation
 		Ti = tC - tA0;
 		Ui = Bi / Ti;
@@ -84,11 +71,6 @@ while K < maxK
         Xi = M/Ti;
         X = X + Xi;
         X2 = X2 + Xi^2;
-
-        %Number of jobs calculation
-        Ni = Wi/Ti;
-        N = N + Ni;
-        N2 = N2 + Ni^2;
 	end
 	
 	Rm = R / K;
@@ -105,45 +87,24 @@ while K < maxK
     Xs = sqrt((X2 - X^2/K)/(K-1));
     CiX = [Xm - d_gamma * Xs / sqrt(K), Xm + d_gamma * Xs / sqrt(K)];
     errX = 2 * d_gamma * Xs / sqrt(K) / Xm;
-    
-    Nm = N / K;
-    Ns = sqrt((N2 - N^2/K)/(K-1));
-    CiN = [Nm - d_gamma * Ns / sqrt(K), Nm + d_gamma * Ns / sqrt(K)];
-    errN = 2 * d_gamma * Ns / sqrt(K) / Nm;
 
-    varRm = varR / K;
-    varRs = sqrt((varR2 - varR^2/K)/(K-1));
-    CivarR = [varRm - d_gamma * varRs / sqrt(K), varRm + d_gamma * varRs / sqrt(K)];
-    errvarR = 2 * d_gamma * varRs / sqrt(K) / varRm;
-
-	if (errR < MaxRelErr ...
-        && errU < MaxRelErr ...
-        && errX < MaxRelErr ...
-        && errN < MaxRelErr ...
-        && errvarR < MaxRelErr)
+	if (errR < MaxRelErr && errU < MaxRelErr ...
+            && errX < MaxRelErr)
 		break;
 	else
-		K = K + DK;
-		newIters = DK;
+		K = K + DK
+		newIters = DK
 	end
 end
 
-if (errR < MaxRelErr ...
-        && errU < MaxRelErr ...
-        && errX < MaxRelErr ...
-        && errN < MaxRelErr)
+if errR < MaxRelErr && errU < MaxRelErr
 	fprintf(1, "Maximum Relative Error reached in %d Iterations\n", K);
 else
 	fprintf(1, "Maximum Relative Error NOT REACHED in %d Iterations\n", K);
 end	
 
 fprintf(1, "Utilization in [%g, %g], with %g confidence. Relative Error: %g\n", CiU(1,1), CiU(1,2), gam, errU);
-fprintf(1, "Throughtput [%g, %g], with %g confidence. Relative Error: %g\n", CiX(1,1), CiX(1,2), gam, errR);
-fprintf(1, "Average Number of jobs in the system [%g, %g], with %g confidence. Relative Error: %g\n", CiN(1,1), CiN(1,2), gam, errN);
 fprintf(1, "Resp. Time in [%g, %g], with %g confidence. Relative Error: %g\n", CiR(1,1), CiR(1,2), gam, errR);
-fprintf(1, "Variance of the response time in [%g, %g], with %g confidence. Relative Error: %g\n", CivarR(1,1), CivarR(1,2), gam, errvarR);
-
-
 
 function F = HyperExp_cdf(L, p)
     l1 = p(1);
