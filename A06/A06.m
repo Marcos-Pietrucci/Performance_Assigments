@@ -5,7 +5,7 @@
 clear all;
 
 %Parameters
-K0 = 2;
+K0 = 100;
 maxK = 20000;
 M = 1000;
 DK = 100;
@@ -49,12 +49,12 @@ while K < maxK
         tA0 = tA;
 	    
         %%% CASE ONE RANDOM NUMBERS %%%
-        %arrivals = HyperExp_rand_generator(M, [l1, l2, p1]);
-        %services = Erlang_rand_generator(M, [k_erl, lamb_erl]);
+        arrivals = HyperExp_rand_generator(M, [l1, l2, p1]);
+        services = Erlang_rand_generator(M, [k_erl, lamb_erl]);
         
         %%% CASE TWO RANDOM NUMBERS %%%
-        arrivals = -log(rand(M,1))./lamb_exp;
-        services = Uniform_rand_generator(M, [a_unif, b_unif]);
+        %arrivals = -log(rand(M,1))./lamb_exp;
+        %services = Uniform_rand_generator(M, [a_unif, b_unif]);
 
 		for j = 1:M
 		    a_ji = arrivals(j);
