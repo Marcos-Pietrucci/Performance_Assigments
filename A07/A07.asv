@@ -82,20 +82,32 @@ while t < Tmax
         end
     end
     
-    %Reached the end! Need 5min to reset the room
+    %Reached the end! Need 5min to reset the rooms
     if s == 4
-        dt = 60*5;
+        ts = 60*5;
     end
     
     %Fell in Lava... Need 5min to reset the rooms
     if s == 5
-        dt = 60*5;
+    
     end
 
     s = ns;
 	t = t + dt;
+	
 	trace(end + 1, :) = [t, s];
 
+end
+		dt = 50 + rand() * (100-50);
+		Tc1 = Tc1 + dt;
+		roundTripTime = roundTripTime + dt;
+    
+    if s == 3
+        
+
+    end
+
+	
 end
 
 Ps1 = Tc1 / t
