@@ -8,17 +8,12 @@ s = 1;
 t = 0;
 
 Tmax = 100000;
-
 trace = [t, s];
-
-Tc1 = 0; %s = 2
-Tc2 = 0; %s= 3
-Texit = 0; %s = 4
-Tlava = 0; %s = 5
 
 %To compute the average game time
 RTT = [];
 game_time = 0;
+room_delay = 5; %Time to setup the room
 
 %To compute the win-ratio
 win_counter = 0;
@@ -32,10 +27,12 @@ while t < Tmax
             if rand() < 0.3 %Reached C2
                 %Time uniform a=3 b=6
                 dt = 3 + rand() * (6-3);
+                game_time = game_time + dt;
                 ns = 3; %C2
             else % Fell in the Lava
                 %Time exp lambda = 0.25
                 dt = -log(rand())/0.25;
+                game_time = game_time + dt;
                 ns = 5; %Lava
             end
         else 
@@ -44,11 +41,13 @@ while t < Tmax
                 %Fell in the Lava
                 % Exp lambd = 0.5
                 dt = -log(rand())/0.5;
+                game_time = game_time + dt;
                 ns = 5; %Lava
             else
                 %Success!
                 %Erlang k=4 lambd =1.5
                 dt = -log(prod(rand(4,1)))/1.5;
+                game_time = game_time + dt;
                 ns = 2; %C1
             end
         end
@@ -61,11 +60,13 @@ while t < Tmax
                 %Was successfull, reached C2
                 %Erlang k=3 lambd =2
                 dt = -log(prod(rand(3,1)))/2;
+                game_time = game_time + dt;
                 ns = 3;
             else
                 %Fell in the Lava
                 %Exponential 0.4
                 dt = -log(rand())/0.4;
+                game_time = game_time + dt;
                 ns = 5;
             end
         else
@@ -74,11 +75,13 @@ while t < Tmax
                 %Was successfull!
                 %Exp = 0.15
                 dt = -log(rand())/0.15;
+                game_time = game_time + dt;
                 ns = 3;
             else
                 %Fell in the lava
                 %Exp lambd = 0.2
                 dt = -log(rand())/0.2;
+                game_time = game_time + dt;
                 ns = 5;
             end
         end		
@@ -89,6 +92,7 @@ while t < Tmax
         %Will try to go to the exit
         %Both cases have Erlang k= 5 lambd = 4
         dt = -log(prod(rand(5,1)))/4;
+        game_time = game_time + dt;
         if rand() < 0.6
             %Success
             ns = 4;
@@ -100,16 +104,24 @@ while t < Tmax
     
     %Reached the end! 
     if s == 4
-        dt = 5; %Need 5min to reset the room
+        %Won the game
         ns = 1;
         win_counter = win_counter + 1;
+
+        %Populate RTT vector
+        RTT(end+1) = game_time;
+        game_time = 0;
     end
     
     %Fell in Lava... Need 5min to reset the rooms
     if s == 5
-        dt = 5; %Need 5min to reset the room
+        %Lost the game
         ns = 1;
         lose_counter = lose_counter + 1;
+
+        %Populate the RTT vector
+        RTT(end+1) = game_time;
+        game_time = 0;
     end
 
     s = ns;
@@ -117,6 +129,14 @@ while t < Tmax
 	trace(end + 1, :) = [t, s];
 end
 
+%Calculating statistics
 game_counter = win_counter + lose_counter;
-win_prob = win_counter/game_counter
+win_prob = win_counter/game_counter;
+averge_duration = mean(RTT);
+throughtput = 60 /(averge_duration+room_delay);
+
+%Displaying values
+fprintf("Winning probability: %.4f", win_prob);
+fprintf("\nAverage game duration: %.4f", averge_duration);
+fprintf("\nThroughtput: %.4f\n", throughtput);
 
