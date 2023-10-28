@@ -27,18 +27,23 @@ while t < Tmax
             %Computar aqui a chance de cair
             if rand() < 0.3 %Reached C2
                 %Time uniform a=3 b=6
+                dt = 3 + rand() * (6-3);
                 ns = 3;
             else %Will fall
-                %Time exp = 0.25
+                %Time exp lambda = 0.25
+                dt = -log(rand())/0.25;
                 ns = 5;
             end
         else %going to c1
             %Computar aqui a chance de cair
             if rand() <= 0.2
                 %Will fall with exp 0.5
+                dt = -log(rand())/0.5;
                 ns = 5; %Lava
             else
-                %will not fall and reach C1 in Erlang k=4 lambd =1.5
+                %will succeed!
+                %Erlang k=4 lambd =1.5
+                dt = -log(prod(rand(4,1)))/1.5;
                 ns = 2; %C1
             end
         end
@@ -50,20 +55,25 @@ while t < Tmax
             if rand () < 025
                 %Was successfull, reached C2
                 %Erlang k=3 lambd =2
+                dt = -log(prod(rand(3,1)))/2;
                 ns = 3;
             else
-                %Was not successfull
+                %Fell in the Lava
                 %Exponential 0.4
+                dt = -log(rand())/0.4;
+                ns = 5;
             end
         else
             %Will go to C2 via white
             if rand() < 0.6
                 %Was successfull!
                 %Exp = 0.15
+                dt = -log(rand())/0.15;
                 ns = 3;
             else
                 %Fell in the lava
-                %exp lambd = 0.2
+                %Exp lambd = 0.2
+                dt = -log(rand())/0.2;
                 ns = 5;
             end
         end		
@@ -73,6 +83,7 @@ while t < Tmax
     if s == 3
         %Will try to go to the exit
         %Both cases have Erlang k= 5 lambd = 4
+        dt = -log(prod(rand(5,1)))/4;
         if rand() < 0.6
             %Success
             ns = 4;
@@ -82,32 +93,20 @@ while t < Tmax
         end
     end
     
-    %Reached the end! Need 5min to reset the rooms
+    %Reached the end! 
     if s == 4
-        ts = 60*5;
+        dt = 5; %Need 5min to reset the room
+        ns = 1;
     end
     
     %Fell in Lava... Need 5min to reset the rooms
     if s == 5
-    
+        dt = 5; %Need 5min to reset the room
     end
 
     s = ns;
 	t = t + dt;
-	
 	trace(end + 1, :) = [t, s];
-
-end
-		dt = 50 + rand() * (100-50);
-		Tc1 = Tc1 + dt;
-		roundTripTime = roundTripTime + dt;
-    
-    if s == 3
-        
-
-    end
-
-	
 end
 
 Ps1 = Tc1 / t
