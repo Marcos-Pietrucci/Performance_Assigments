@@ -36,7 +36,7 @@ while t < Tmax
                 ns = 5; %Lava
             end
         else 
-            %Going to c1
+            %Going to c1 via yellow
             if rand() < 0.2
                 %Fell in the Lava
                 % Exp lambd = 0.5
