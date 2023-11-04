@@ -1,0 +1,52 @@
+% Marcos Vinicius Firmino Pietrucci
+% 10914211
+% Assigment 8
+
+%Defininf the exponential rates
+
+%LowStatte
+LOW = 
+lb1 = 0.33;
+lb2 = 0.6;
+lb3 = 0.4;
+lb4 = 1.0;  
+lb5 = 0.05;
+lb6 = 6.0;  %Related to Down states
+
+%Defining the recovery probability from Down State
+p1=0.6;
+p2=0.3;
+p3=0.1;
+tolerance = 1e-12;
+
+q11=lb1+lb5;
+q22=(lb2 + lb3+lb5 );
+q33=lb4+lb5;
+q44=p1*lb6+p2*lb6+p3*lb6;
+
+%Creating the infentesimal generator
+Q = [
+    -lb1-lb5, lb1, 0, lb5;  % LOW
+    lb2, -lb2-lb3-lb5, lb3, lb5;  % MEDIUM
+    0, lb4,-lb4-lb5, lb5;  % HIGH
+    p1*lb6, p2*lb6, p3*lb6, -(q44)  % DOWN
+];
+a=sum(Q');
+a(abs(a) < tolerance) = 0;
+pm = [0, 1, 0, 0];
+pd = [0, 0, 0, 1];
+
+% Display the infinitesimal generator
+disp('Infinitesimal Generator (Q):');
+disp(Q);
+[t, Sol] = ode45(@(t,x) Q'*x, [0 8], pm');
+figure;
+plot(t, Sol, "-");
+title("medium")
+
+
+[t, Sol] = ode45(@(t,x) Q'*x, [0 8], pd');
+figure;
+plot(t, Sol, "-");
+title("down")
+
