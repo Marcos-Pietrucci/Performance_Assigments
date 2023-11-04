@@ -27,7 +27,6 @@ DOWN = [p1*lbd, p2*lbd, p3*lbd, -(qdd)];
 Q = [LOW;MED;HIGH;DOWN];
 
 %Computing the solution
-s=sum(Q');
 p_MED = [0, 1, 0, 0];
 p_DWN = [0, 0, 0, 1];
 T = [0 8];
