@@ -28,7 +28,6 @@ Q = [LOW;MED;HIGH;DOWN];
 
 %Computing the solution
 s=sum(Q');
-%s(abs(s) < tolerance) = 0;
 p_MED = [0, 1, 0, 0];
 p_DWN = [0, 0, 0, 1];
 T = [0 8];
@@ -39,9 +38,11 @@ disp(Q);
 [t, Sol] = ode45(@(t,x) Q'*x,T, p_MED');
 figure;
 plot(t, Sol, "-");
-title("Starting point Medium")
+title("Starting from Medium")
+legend({'Low','Medium', 'High', 'Down'},'Location','northeast');
 
 [t, Sol] = ode45(@(t,x) Q'*x, T, p_DWN');
 figure;
 plot(t, Sol, "-");
-title("Starting point DOWN")
+title("Starting from Down")
+legend({'Low','Medium', 'High', 'Down'},'Location','northeast');
