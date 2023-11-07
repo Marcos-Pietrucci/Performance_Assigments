@@ -36,13 +36,27 @@ Q = [SCAN;NIGHT;SUNNY;CLOUD];
 %Calculating the steady state probability of the system
 Qp = [Q(:, 1:3), ones(4,1)];
 
-pi_lim = [0,0,0,1] *inv(Qp);
+pi_lim = [0,0,0,1]*inv(Qp);
 
 %Reward vector related to power consumption
 alpha_power = [12, 0.1, 0.1, 0.1];
 avg_powCom = pi_lim *alpha_power';
 
-%Reward matrix related to power consumption
+%Cost matrix related to power consumption
 %The order: SCAN-NIGHT-SUNNY-CLOUDY
-reward_m = []
+rwd_m =  [0, 0, 0, 0;
+          1, 0, 0, 0; %To have a scan is good!
+          1, 0, 0, 0;
+          1, 0, 0, 0];
 
+X = sum(sum((rwd_m .* Q)'.* pi_lim))*24*60;
+
+fprintf("\nAverage power consumption: %.3f", avg_powCom);
+fprintf("\nUtilization: %.3f", pi_lim(1));
+fprintf("\nThroughput: %d", X);
+fprintf("\nInfinitesimal generator: \n");
+disp(Q);
+fprintf("\nReward Vector: \n");
+disp(alpha_power);
+fprintf("\nReward matrix: \n");
+disp(rwd_m);

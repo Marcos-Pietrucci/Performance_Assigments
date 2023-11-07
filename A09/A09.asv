@@ -42,6 +42,14 @@ pi_lim = [0,0,0,1] *inv(Qp);
 alpha_power = [12, 0.1, 0.1, 0.1];
 avg_powCom = pi_lim *alpha_power';
 
-%Reward matrix related to power consumption
-rew
+%Cost matrix related to power consumption
+%The order: SCAN-NIGHT-SUNNY-CLOUDY
+cost_m = [0, 0.1, 0.1, 0.1;
+            15, 0, 0, 0;
+            15, 0, 0, 0;
+            15, 0, 0, 0];
 
+pi_lim*sum((cost_m .* Q)')'
+
+
+fprintf("");
