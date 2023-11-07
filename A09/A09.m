@@ -42,6 +42,10 @@ pi_lim = [0,0,0,1]*inv(Qp);
 alpha_power = [12, 0.1, 0.1, 0.1];
 avg_powCom = pi_lim *alpha_power';
 
+%Utilization reward vector 
+ut_rwd = [1, 0 , 0, 0];
+U = ut_rwd*pi_lim';
+
 %Cost matrix related to power consumption
 %The order: SCAN-NIGHT-SUNNY-CLOUDY
 rwd_m =  [0, 0, 0, 0;
@@ -52,11 +56,14 @@ rwd_m =  [0, 0, 0, 0;
 X = sum(sum((rwd_m .* Q)'.* pi_lim))*24*60;
 
 fprintf("\nAverage power consumption: %.3f", avg_powCom);
-fprintf("\nUtilization: %.3f", pi_lim(1));
+fprintf("\nUtilization: %.3f", U);
 fprintf("\nThroughput: %.0f", X);
 fprintf("\nInfinitesimal generator: \n");
 disp(Q);
-fprintf("\nReward Vector: \n");
+fprintf("\nReward Vector power consumption: \n");
 disp(alpha_power);
+fprintf("\nReward vector of the utilization: \n");
+disp(ut_rwd);
 fprintf("\nReward matrix: \n");
 disp(rwd_m);
+
