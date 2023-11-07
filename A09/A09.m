@@ -53,7 +53,7 @@ X = sum(sum((rwd_m .* Q)'.* pi_lim))*24*60;
 
 fprintf("\nAverage power consumption: %.3f", avg_powCom);
 fprintf("\nUtilization: %.3f", pi_lim(1));
-fprintf("\nThroughput: %d", X);
+fprintf("\nThroughput: %.0f", X);
 fprintf("\nInfinitesimal generator: \n");
 disp(Q);
 fprintf("\nReward Vector: \n");
