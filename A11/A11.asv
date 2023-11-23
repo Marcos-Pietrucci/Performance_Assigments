@@ -1,0 +1,19 @@
+%Marcos Vinicius Firmino Pietrucci
+% 10914211
+% Assigment 11
+
+%Given values
+lambda_1 = 150 / 60;
+ser_time=350/1000;
+k=32;
+
+%Utilization
+rho=lambda_1*ser_time;
+U = (rho - rho^(k+1))/(1-rho^(k+1));
+
+%Calculating requested values
+loss_p = (rho^k - rho^(k+1))/(1-rho^(k+1));
+avg_number_of_jobs = (rho/(1-rho)) - ((k+1)*rho^(k+1))/(1-rho^(k+1));
+drop_rate = lambda_1 * (rho^k - rho^(k+1))/(1-rho^(k+1));
+avg_response_time=ser_time* (1-(k+1)*rho^k + k*rho^(k+1))/((1-rho)*(1-rho^k));
+avg_time_spent_in_queue= rho * avg_number_of_jobs / lambda_1;
