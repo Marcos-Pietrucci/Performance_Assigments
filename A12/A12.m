@@ -3,14 +3,14 @@
 % Assignment 12
 
 %G/G/1 Queue given values
-lambda = 10;
+lambda = 10; %10j/s
 mu1 = 50;
 mu2 = 5;
 p1 = 0.8;
 p2 = 1-p1;
 
 %Average service time
-D = p1/mu1 + p2/mu2;
+D = p1/mu1 + p2/mu2; %First moment
 moment2 = 2*(p1/mu1^2 + p2/mu2^2);
 rho = lambda*D; %That is the utilization
 
@@ -18,11 +18,44 @@ rho = lambda*D; %That is the utilization
 R = D + (lambda*moment2)/(2*(1-rho));
 N = R*lambda;
 
-fprintf("\n\n M/G/1");
+fprintf("\n\nM/G/1");
 fprintf("\nUtilization of system: %.4f", rho);
 fprintf("\nAverage response time: %.4f", R);
 fprintf("\nAverage number of jobs in system: %.4f", N);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% G/G/3 system
+% G/G/3 system with M/M/c queue
+lambda = 240; %240j/s
+k = 5; %erlang stages
+c = 3; %3 servers
+
+%Erlang's distribution formulas
+mu = k/lambda;
+cv = 1/(sqrt(k));
+ca = sqrt(moment2 - D^2)/D; 
+
+
+%For the queue
+T = k / lambda;
+lambda = 1 / T;
+rho = D / (3 * T);
+sum = 0;
+
+for i = 0:(c-1)
+    sum = sum + ((c*rho)^i)/factorial(i);
+end
+
+theta = (D/(c*(1-rho))) / (1 + (1-rho)*(factorial(c)/(c*rho)^c)*sum);
+
+%Kingsman's formula
+R = D + ((ca^2 + cv^2)/2) * theta;
+
+%Average number of jobs
+N = lambda * R;
+
+fprintf("\n\nG/G/3 system");
+fprintf("\nUtilization of system: %.4f", rho);
+fprintf("\nAverage response time: %.4f", R);
+fprintf("\nAverage number of jobs in system: %.4f", N);
+
 
