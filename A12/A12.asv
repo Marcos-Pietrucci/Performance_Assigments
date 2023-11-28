@@ -19,10 +19,6 @@ R = D + (lambda*moment2)/(2*(1-rho));
 N = R*lambda;
 
 fprintf("\n\n M/G/1");
-fprintf("\nUtilization of system: %.4f", rho);
-fprintf("\nAverage response time: %.4f", R);
-fprintf("\nAverage number of jobs in system: %.4f", N);
+fprintf("\NUtilization of system: %.4f", rho);
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% G/G/3 system
 
