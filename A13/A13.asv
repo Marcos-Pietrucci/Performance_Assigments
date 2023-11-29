@@ -1,0 +1,23 @@
+% Marcos Vinicius Firmino Pietrucci
+% 10914211
+% Assignment 12
+
+%%% First scenario - closed model
+
+%Given service times in seconds
+S=[10,20e-3,10e-3,3e-3];
+
+
+%Rooting matrix
+P = [0,1.0,0,0;
+     0.1,0,0.3,0.6;
+     0,0.85,0,0.15;
+     0,0.75,0.25,0];
+
+Pn = [zeros(4,1),P(:,2:4)];
+
+%Terminals will be the reference station
+lamba_ref = [1,0,0,0];
+v_ref = lamba_ref * inv(eye(4)-Pn)
+D = S.*v_ref
+
