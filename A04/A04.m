@@ -3,7 +3,7 @@
 % Assigment 4
 
 %Reading the Traces
-DataSet = csvread('Trace2.csv');
+DataSet = csvread('Trace1.csv');
 % DataSet = csvread('Trace2.csv');
 
 %Creating the DataSet
@@ -78,14 +78,14 @@ end
 %Checking for existance of HyperExponential
 if coef_var > 1 %Only available if the Cv is less than 1
     figure(1)
+    %ERLANG NOT AVAILABLE since lambda is 0
     plot(sDataSet, [1:N]/N, ".", t, Unif_cdf(t, [left_boundary, right_boundary]), ...
         t, Exp_cdf(t, [exp_lambda]), ...
-        t, gamcdf(t, k_erlang, lambda_erlang), ...
         t, Weibull_cdf(t, [weib_scale, weib_shape]), ...
         t, HyperExp_cdf(t, [hyper_parameters]), ...
         t, Pareto_cdf(t, [alpha_pareto, m_pareto]))
         
-    legend({'DataSet','Uniform', 'Exponential','Erlang', 'Weibull', 'HyperExponential', 'Pareto'},'Location','southeast')
+    legend({'DataSet','Uniform', 'Exponential','Weibull', 'HyperExponential', 'Pareto'},'Location','southeast')
     title('CDF distributions Trace 2');
     grid
 end
@@ -106,8 +106,6 @@ fprintf("\nPareto scale m: %.5f", m_pareto);
 fprintf("\nHyper-Exponential parameters: %.5f %.5f %.5f", hyper_parameters(1), hyper_parameters(2), hyper_parameters(3));
 fprintf("\nHypo-Exponential parameters: %.5f %.5f", hypo_parameters(1), hypo_parameters(2));
 fprintf("\n");
-
-
 
 function F = Weibull_cdf(x, p)
     lambda  = p(1);
@@ -134,4 +132,3 @@ function F = Pareto_cdf(x, p)
         i = i+1;
     end
 end
-

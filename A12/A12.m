@@ -34,7 +34,6 @@ mu = k/lambda;
 cv = 1/(sqrt(k));
 ca = sqrt(moment2 - D^2)/D; 
 
-
 %For the queue
 T = k / lambda;
 lambda = 1 / T;

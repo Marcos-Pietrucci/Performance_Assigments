@@ -2,12 +2,14 @@
 % 10914211
 % Assigment 10
 
+%%%%%% M/M/1 system %%%%%
 %Given values
 lambda = 40; 
 %Average service time
 D = 16e-3;
 U = lambda *D;
 
+%%% M/M/1 %%%
 %Service rate
 mu = 1/D;
 rho = lambda/mu;

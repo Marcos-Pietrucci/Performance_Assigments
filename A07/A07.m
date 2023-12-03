@@ -136,7 +136,8 @@ averge_duration = mean(RTT);
 throughtput = 60 /(averge_duration+room_delay);
 
 %Displaying values
-fprintf("Winning probability: %.4f", win_prob);
+fprintf("\nWinning probability: %.4f", win_prob);
 fprintf("\nAverage game duration: %.4f", averge_duration);
-fprintf("\nThroughtput: %.4f\n", throughtput);
-
+fprintf("\nThroughtput: %.4f", throughtput);
+fprintf("\nNº of simulations: %d", Tmax);
+fprintf("\n");
