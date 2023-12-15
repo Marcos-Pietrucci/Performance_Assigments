@@ -20,7 +20,6 @@ l2 = lambdaIn / X;
 v2 = l2 * inv(eye(4) - P);
 D_arr = S .* v2; %Calculate the demands for each server
 
-
 U2 = X*D_arr(2);
 U3 = X*D_arr(3);
 U4 = X*D_arr(4);

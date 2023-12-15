@@ -7,7 +7,6 @@
 %Given service times in seconds
 S=[10,20e-3,10e-3,3e-3];
 
-
 %Rooting matrix
 P = [0,1.0,0,0;
      0.1,0, 0.3,0.6;
