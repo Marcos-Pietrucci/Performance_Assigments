@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
-<archive xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="project.jsimg" timestamp="Sat Jan 06 22:31:36 CET 2024" xsi:noNamespaceSchemaLocation="Archive.xsd">
+<archive xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="project.jsimg" timestamp="Sun Jan 07 14:24:49 CET 2024" xsi:noNamespaceSchemaLocation="Archive.xsd">
     <sim disableStatisticStop="false" logDecimalSeparator="," logDelimiter=";" logPath="/home/marcos/JMT" logReplaceMode="0" maxEvents="-1" maxSamples="1000000" name="project.jsimg" polling="1.0" xsi:noNamespaceSchemaLocation="SIMmodeldefinition.xsd">
         <userClass customers="32" name="LOW" priority="0" referenceSource="Router" softDeadline="0.0" type="closed"/>
         <userClass customers="10" name="HEAVY" priority="0" referenceSource="Router" softDeadline="0.0" type="closed"/>
@@ -30,9 +30,12 @@
                     <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
                 </parameter>
             </section>
-            <section className="Server">
+            <section className="PSServer">
                 <parameter classPath="java.lang.Integer" name="maxJobs">
                     <value>8</value>
+                </parameter>
+                <parameter classPath="java.lang.Integer" name="maxRunning">
+                    <value>-1</value>
                 </parameter>
                 <parameter array="true" classPath="java.lang.Integer" name="numberOfVisits">
                     <refClass>LOW</refClass>
@@ -71,6 +74,22 @@
                                 <value>0.01671</value>
                             </subParameter>
                         </subParameter>
+                    </subParameter>
+                </parameter>
+                <parameter array="true" classPath="jmt.engine.NetStrategies.PSStrategy" name="PSStrategy">
+                    <refClass>LOW</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.PSStrategies.EPSStrategy" name="EPSStrategy"/>
+                    <refClass>HEAVY</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.PSStrategies.EPSStrategy" name="EPSStrategy"/>
+                </parameter>
+                <parameter array="true" classPath="java.lang.Double" name="serviceWeights">
+                    <refClass>LOW</refClass>
+                    <subParameter classPath="java.lang.Double" name="serviceWeight">
+                        <value>1.0</value>
+                    </subParameter>
+                    <refClass>HEAVY</refClass>
+                    <subParameter classPath="java.lang.Double" name="serviceWeight">
+                        <value>1.0</value>
                     </subParameter>
                 </parameter>
             </section>
@@ -121,9 +140,12 @@
                     <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
                 </parameter>
             </section>
-            <section className="Server">
+            <section className="PSServer">
                 <parameter classPath="java.lang.Integer" name="maxJobs">
                     <value>4</value>
+                </parameter>
+                <parameter classPath="java.lang.Integer" name="maxRunning">
+                    <value>-1</value>
                 </parameter>
                 <parameter array="true" classPath="java.lang.Integer" name="numberOfVisits">
                     <refClass>LOW</refClass>
@@ -162,6 +184,22 @@
                                 <value>0.0669</value>
                             </subParameter>
                         </subParameter>
+                    </subParameter>
+                </parameter>
+                <parameter array="true" classPath="jmt.engine.NetStrategies.PSStrategy" name="PSStrategy">
+                    <refClass>LOW</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.PSStrategies.EPSStrategy" name="EPSStrategy"/>
+                    <refClass>HEAVY</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.PSStrategies.EPSStrategy" name="EPSStrategy"/>
+                </parameter>
+                <parameter array="true" classPath="java.lang.Double" name="serviceWeights">
+                    <refClass>LOW</refClass>
+                    <subParameter classPath="java.lang.Double" name="serviceWeight">
+                        <value>1.0</value>
+                    </subParameter>
+                    <refClass>HEAVY</refClass>
+                    <subParameter classPath="java.lang.Double" name="serviceWeight">
+                        <value>1.0</value>
                     </subParameter>
                 </parameter>
             </section>
@@ -478,7 +516,7 @@
                                     <value>ENERGY_ef</value>
                                 </subParameter>
                                 <subParameter classPath="java.lang.Double" name="probability">
-                                    <value>1.0</value>
+                                    <value>0.0</value>
                                 </subParameter>
                             </subParameter>
                             <subParameter classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntry">
@@ -486,7 +524,7 @@
                                     <value>HIGH_perf</value>
                                 </subParameter>
                                 <subParameter classPath="java.lang.Double" name="probability">
-                                    <value>0.0</value>
+                                    <value>1.0</value>
                                 </subParameter>
                             </subParameter>
                         </subParameter>
@@ -499,7 +537,7 @@
                                     <value>ENERGY_ef</value>
                                 </subParameter>
                                 <subParameter classPath="java.lang.Double" name="probability">
-                                    <value>0.0</value>
+                                    <value>1.0</value>
                                 </subParameter>
                             </subParameter>
                             <subParameter classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntry">
@@ -507,7 +545,7 @@
                                     <value>HIGH_perf</value>
                                 </subParameter>
                                 <subParameter classPath="java.lang.Double" name="probability">
-                                    <value>1.0</value>
+                                    <value>0.0</value>
                                 </subParameter>
                             </subParameter>
                         </subParameter>
@@ -590,32 +628,44 @@
             </arc>
         </connectionShape>
     </jmodel>
-    <results elapsedTime="6657" logDecimalSeparator="," logDelimiter=";" pollingInterval="1.0" xsi:noNamespaceSchemaLocation="Results.xsd">
-        <measure alpha="0.99" analyzedSamples="61440" discardedSamples="5" finalValue="1.837305777315067" name="System Throughput" nodeType="" precision="0.03" referenceClass="" referenceStation="" state="1" type="16">
-            <sample lastIntervalAvgValue="1.8374814164830118" lowerBound="1.7797093966529578" meanValue="1.8350272810427117" simulationTime="20911.23189346021" upperBound="1.893894322699358"/>
-            <sample lastIntervalAvgValue="1.8343091053391132" lowerBound="1.8106071474417278" meanValue="1.837305777315067" simulationTime="33461.46125937946" upperBound="1.8648035701836982"/>
+    <results elapsedTime="14722" logDecimalSeparator="," logDelimiter=";" pollingInterval="1.0" xsi:noNamespaceSchemaLocation="Results.xsd">
+        <measure alpha="0.99" analyzedSamples="16640" discardedSamples="275" finalValue="2.7616880784761997" name="System Throughput" nodeType="" precision="0.03" referenceClass="" referenceStation="" state="1" type="16">
+            <sample lastIntervalAvgValue="2.492021297103635" meanValue="2.492021297103635" simulationTime="209.4685148183514"/>
+            <sample lastIntervalAvgValue="2.7563596530703625" lowerBound="2.6864363002508083" meanValue="2.7616880784761997" simulationTime="6156.805605513146" upperBound="2.8412772216624487"/>
         </measure>
-        <measure alpha="0.99" analyzedSamples="10000" discardedSamples="0" finalValue="1.0" name="ENERGY_ef_Utilization" nodeType="station" precision="0.03" referenceClass="" referenceStation="ENERGY_ef" state="1" type="6">
-            <sample lastIntervalAvgValue="1.0" meanValue="1.0" simulationTime="6001.947286830312"/>
-            <sample lastIntervalAvgValue="1.0" meanValue="1.0" simulationTime="6001.947286830312"/>
+        <measure alpha="0.99" analyzedSamples="25600" discardedSamples="255" finalValue="0.9999994670536269" name="ENERGY_ef_Utilization" nodeType="station" precision="0.03" referenceClass="" referenceStation="ENERGY_ef" state="1" type="6">
+            <sample lastIntervalAvgValue="0.910910123516144" meanValue="0.910910123516144" simulationTime="209.39510101254237"/>
+            <sample lastIntervalAvgValue="0.9999629275920124" meanValue="0.9993615345591247" simulationTime="31006.71255763808"/>
+            <sample lastIntervalAvgValue="0.9999993838369018" meanValue="0.9996971810676186" simulationTime="65444.831157730565"/>
+            <sample lastIntervalAvgValue="0.9999994711594496" meanValue="0.9997990591001654" simulationTime="98713.24156433837"/>
+            <sample lastIntervalAvgValue="0.9999987921241722" meanValue="0.999844358804143" simulationTime="127668.65494724002"/>
+            <sample lastIntervalAvgValue="0.9999997150204892" lowerBound="0.9874850898400843" meanValue="0.9999994670536269" simulationTime="153388.40626009268" upperBound="1.0125138442671695"/>
         </measure>
-        <measure alpha="0.99" analyzedSamples="10000" discardedSamples="0" finalValue="1.0" name="HIGH_perf_Utilization" nodeType="station" precision="0.03" referenceClass="" referenceStation="HIGH_perf" state="1" type="6">
-            <sample lastIntervalAvgValue="1.0" meanValue="1.0" simulationTime="20905.33349844915"/>
-            <sample lastIntervalAvgValue="1.0" meanValue="1.0" simulationTime="58943.86821081059"/>
+        <measure alpha="0.99" analyzedSamples="10000" discardedSamples="10" finalValue="1.0" name="HIGH_perf_Utilization" nodeType="station" precision="0.03" referenceClass="" referenceStation="HIGH_perf" state="1" type="6">
+            <sample lastIntervalAvgValue="1.0" meanValue="1.0" simulationTime="209.53125354102653"/>
+            <sample lastIntervalAvgValue="1.0" meanValue="1.0" simulationTime="1930.311142481758"/>
         </measure>
-        <measure alpha="0.99" analyzedSamples="5120" discardedSamples="315" finalValue="18.82823644752513" name="ENERGY_ef_Response Time" nodeType="station" precision="0.03" referenceClass="" referenceStation="ENERGY_ef" state="1" type="2">
-            <sample lastIntervalAvgValue="18.775030725092783" lowerBound="18.313552006628992" meanValue="18.82823644752513" simulationTime="3256.74065883498" upperBound="19.342920888421265"/>
-            <sample lastIntervalAvgValue="18.775030725092783" lowerBound="18.313552006628992" meanValue="18.82823644752513" simulationTime="3256.74065883498" upperBound="19.342920888421265"/>
+        <measure alpha="0.99" analyzedSamples="35840" discardedSamples="1045" finalValue="118.4389864214132" name="ENERGY_ef_Response Time" nodeType="station" precision="0.03" referenceClass="" referenceStation="ENERGY_ef" state="1" type="2">
+            <sample lastIntervalAvgValue="29.58900421495437" meanValue="29.58900421495437" simulationTime="209.39510101254237"/>
+            <sample lastIntervalAvgValue="116.04550350572137" meanValue="114.23827545037122" simulationTime="31006.67834665929"/>
+            <sample lastIntervalAvgValue="117.35545562008852" lowerBound="108.13584771594476" meanValue="116.85686370052895" simulationTime="65444.177164895125" upperBound="125.57787968511313"/>
+            <sample lastIntervalAvgValue="120.55085107515872" lowerBound="108.13584771594476" meanValue="116.85686370052895" simulationTime="98713.15183980786" upperBound="125.57787968511313"/>
+            <sample lastIntervalAvgValue="124.58674610574703" lowerBound="114.4233204493144" meanValue="121.20031879438956" simulationTime="127668.1011974486" upperBound="127.97731713946472"/>
+            <sample lastIntervalAvgValue="116.24502846502665" lowerBound="114.4233204493144" meanValue="121.20031879438956" simulationTime="160771.64639535153" upperBound="127.97731713946472"/>
+            <sample lastIntervalAvgValue="119.03198894548566" lowerBound="114.4233204493144" meanValue="121.20031879438956" simulationTime="192411.77494881226" upperBound="127.97731713946472"/>
+            <sample lastIntervalAvgValue="118.87394858762178" lowerBound="114.4233204493144" meanValue="121.20031879438956" simulationTime="223657.71243769035" upperBound="127.97731713946472"/>
+            <sample lastIntervalAvgValue="118.97896755078035" lowerBound="112.0197312780894" meanValue="118.77157126887843" simulationTime="251874.80312824994" upperBound="125.52341125966747"/>
+            <sample lastIntervalAvgValue="117.35911525793895" lowerBound="112.0197312780894" meanValue="118.77157126887843" simulationTime="282512.448274584" upperBound="125.52341125966747"/>
+            <sample lastIntervalAvgValue="118.11427517121794" lowerBound="112.0197312780894" meanValue="118.77157126887843" simulationTime="311675.7771348459" upperBound="125.52341125966747"/>
+            <sample lastIntervalAvgValue="122.33632295591485" lowerBound="112.0197312780894" meanValue="118.77157126887843" simulationTime="339385.7376242153" upperBound="125.52341125966747"/>
+            <sample lastIntervalAvgValue="124.63481923775073" lowerBound="112.0197312780894" meanValue="118.77157126887843" simulationTime="365560.00811858947" upperBound="125.52341125966747"/>
+            <sample lastIntervalAvgValue="110.01347719554073" lowerBound="112.0197312780894" meanValue="118.77157126887843" simulationTime="392569.8298242869" upperBound="125.52341125966747"/>
+            <sample lastIntervalAvgValue="113.42731488088019" lowerBound="112.0197312780894" meanValue="118.77157126887843" simulationTime="420874.8700901034" upperBound="125.52341125966747"/>
+            <sample lastIntervalAvgValue="124.1359735850811" lowerBound="114.99148531562884" meanValue="118.4389864214132" simulationTime="437879.8516633292" upperBound="121.88648752719757"/>
         </measure>
-        <measure alpha="0.99" analyzedSamples="51200" discardedSamples="3105" finalValue="60.1287021844948" name="HIGH_perf_Response Time" nodeType="station" precision="0.03" referenceClass="" referenceStation="HIGH_perf" state="1" type="2">
-            <sample lastIntervalAvgValue="57.54549475482093" meanValue="57.54549475482093" simulationTime="20905.33349844915"/>
-            <sample lastIntervalAvgValue="58.915320134863755" meanValue="58.48278790266121" simulationTime="67173.48189155146"/>
-            <sample lastIntervalAvgValue="59.44694828983818" lowerBound="54.92062640445165" meanValue="58.5037221421045" simulationTime="116583.45378965682" upperBound="62.08681787975735"/>
-            <sample lastIntervalAvgValue="60.74058928989757" lowerBound="54.92062640445165" meanValue="58.5037221421045" simulationTime="166695.08947575127" upperBound="62.08681787975735"/>
-            <sample lastIntervalAvgValue="60.63079837397084" lowerBound="57.574239110524545" meanValue="59.93066967412458" simulationTime="212275.02064467635" upperBound="62.287100237724616"/>
-            <sample lastIntervalAvgValue="59.72816487842563" lowerBound="57.574239110524545" meanValue="59.93066967412458" simulationTime="266000.71472359065" upperBound="62.287100237724616"/>
-            <sample lastIntervalAvgValue="60.46892484298719" lowerBound="57.574239110524545" meanValue="59.93066967412458" simulationTime="322265.91967514536" upperBound="62.287100237724616"/>
-            <sample lastIntervalAvgValue="61.569600726375754" lowerBound="58.85367229131125" meanValue="60.1287021844948" simulationTime="326578.77356517245" upperBound="61.40373207767835"/>
+        <measure alpha="0.99" analyzedSamples="35840" discardedSamples="10" finalValue="11.59270346069987" name="HIGH_perf_Response Time" nodeType="station" precision="0.03" referenceClass="" referenceStation="HIGH_perf" state="1" type="2">
+            <sample lastIntervalAvgValue="12.651753409492096" meanValue="12.651753409492096" simulationTime="209.53125354102653"/>
+            <sample lastIntervalAvgValue="11.621133401382474" lowerBound="11.428251753236045" meanValue="11.59270346069987" simulationTime="13503.249051089906" upperBound="11.757155168163694"/>
         </measure>
     </results>
 </archive>

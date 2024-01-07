@@ -7,7 +7,7 @@ DataSet = csvread('./Traces/TraceB-HE.txt');
 %Creating the DataSet
 sDataSet = sort(DataSet);
 N = length(sDataSet);
-t = [0:10]; %for intervals
+t = [0:1000]; %for intervals
 
 %Calculating the moments
 Mean = sum(sDataSet)/N;
@@ -30,7 +30,7 @@ lambda_erlang = k_erlang/Mean;
 
 %Weibull
 weibull_equations = @(x) [x(1)*gamma(1 + 1/x(2))-Mean,x(1)^2 * gamma(1+2/x(2))-Moment2]; 
-results = fsolve(weibull_equations, [1,1], options);
+results = fsolve(weibull_equations, [1,1]);
 weib_scale = results(1);
 weib_shape = results(2);
 
@@ -69,7 +69,7 @@ if coef_var < 1 %Only available if the Cv is less than 1
         t, HypoExp_cdf(t, [hypo_parameters]), ...
         t, Pareto_cdf(t, [alpha_pareto, m_pareto]))
     legend({'DataSet','Uniform', 'Exponential','Erlang', 'Weibull', 'HypoExponential', 'Pareto'},'Location','southeast')
-    title('Fitting LE execution times');
+    title('Fitting HE execution times');
     grid
 end
 
@@ -84,7 +84,7 @@ if coef_var > 1 %Only available if the Cv is less than 1
         t, Pareto_cdf(t, [alpha_pareto, m_pareto]))
         
     legend({'DataSet','Uniform', 'Exponential','Weibull', 'HyperExponential', 'Pareto'},'Location','southeast')
-    title('Fitting LE execution times');
+    title('Fitting HE execution times');
     grid
 end
 
